@@ -5,7 +5,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 primary_key=True)
-    limit = models.IntegerField(blank=True, null=True)
+    limit = models.PositiveIntegerField(blank=True, null=True)
 
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
