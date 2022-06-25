@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Profile(models.Model):
     user = models.OneToOneField(User,
@@ -11,7 +12,7 @@ class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     date = models.DateField(blank=False, null=False)
     name = models.CharField(max_length=50, blank=False)
-    amount = models.FloatField(blank=False, null=False)
+    amount = models.FloatField(blank=False, null=False, validators=[MinValueValidator(0.0)])
 
 class Category(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
