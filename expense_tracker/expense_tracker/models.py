@@ -9,14 +9,17 @@ class Expense(models.Model):
     amount = models.FloatField(blank=False, null=False, validators=[MinValueValidator(0.0)])
 
 class Category(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
-    expense = models.ForeignKey(Expense, on_delete=models.CASCADE, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    expense = models.ForeignKey(Expense, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=30, blank=False, unique=True)
+
+    def __str__(self):
+        return self.name
 
 class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 primary_key=True)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, blank=True)
     limit_flag = models.BooleanField(blank=False, default=False)
     limit = models.PositiveIntegerField(blank=True, null=True)
