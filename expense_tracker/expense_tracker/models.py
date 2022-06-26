@@ -6,6 +6,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 primary_key=True)
+    limit_flag = models.BooleanField(blank=False, default=False)
     limit = models.PositiveIntegerField(blank=True, null=True)
 
 class Expense(models.Model):
