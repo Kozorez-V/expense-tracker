@@ -18,4 +18,4 @@ class Expense(models.Model):
 class Category(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     expense = models.ForeignKey(Expense, on_delete=models.CASCADE, null=False)
-    name = models.CharField(max_length=30, blank=False)
+    name = models.CharField(max_length=30, blank=False, unique=True)
