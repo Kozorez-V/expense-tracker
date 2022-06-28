@@ -13,7 +13,6 @@ class Expense(models.Model):
     amount = models.FloatField(blank=False, null=False, validators=[MinValueValidator(0.0)])
 
 class Category(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     expense = models.ForeignKey(Expense, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=30, blank=False, unique=True)
 
@@ -24,7 +23,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 primary_key=True)
-    categories = models.ManyToManyField(Category, blank=True)
+    categories = models.ManyToManyField(Category, blank=False, related_name='users')
     limit_flag = models.BooleanField(blank=False, default=False)
     limit = models.PositiveIntegerField(blank=True, null=True)
 
@@ -36,4 +35,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+@receiver(post_save, sender=User)
+def assign_default_categories(sender, instance, **kwargs):
+    pass
 
