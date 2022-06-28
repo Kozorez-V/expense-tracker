@@ -14,7 +14,7 @@ class Expense(models.Model):
 
 class Category(models.Model):
     expense = models.ForeignKey(Expense, on_delete=models.CASCADE, blank=True, null=True)
-    name = models.CharField(max_length=30, blank=False)
+    name = models.CharField(max_length=30, blank=False, unique=True)
 
     def __str__(self):
         return self.name
@@ -37,6 +37,9 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 @receiver(post_save, sender=User)
-def assign_default_categories(sender, instance, **kwargs):
-    pass
+def assign_default_categories(sender, instance, created, **kwargs):
+    if created:
+        pass
+
+
 
