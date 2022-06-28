@@ -14,7 +14,7 @@ class Expense(models.Model):
 
 class Category(models.Model):
     expense = models.ForeignKey(Expense, on_delete=models.CASCADE, blank=True, null=True)
-    name = models.CharField(max_length=30, blank=False, unique=True)
+    name = models.CharField(max_length=30, blank=False)
 
     def __str__(self):
         return self.name
