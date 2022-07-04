@@ -53,6 +53,3 @@ def save_user_profile(sender, instance, **kwargs):
 def assign_default_categories(sender, instance, created, **kwargs):
     if created:
         pass
-
-
-
