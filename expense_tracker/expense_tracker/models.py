@@ -13,6 +13,10 @@ class Profile(models.Model):
     limit_flag = models.BooleanField(blank=False, default=False)
     limit = models.PositiveIntegerField(blank=True, null=True)
 
+    class Meta:
+        verbose_name = 'Профили'
+        verbose_name_plural = 'Профили'
+
 class Category(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=30, blank=False)
@@ -20,12 +24,20 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Категории'
+        verbose_name_plural = 'Категории'
+
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(blank=False, null=False)
     name = models.CharField(max_length=50, blank=False)
     amount = models.FloatField(blank=False, null=False, validators=[MinValueValidator(0.0)])
+
+    class Meta:
+        verbose_name = 'Расходы'
+        verbose_name_plural = 'Расходы'
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
