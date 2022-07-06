@@ -38,6 +38,7 @@ class Expense(models.Model):
     class Meta:
         verbose_name = 'Расходы'
         verbose_name_plural = 'Расходы'
+        ordering = ['date', 'category']
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
