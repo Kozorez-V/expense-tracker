@@ -60,9 +60,5 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
-@receiver(post_save, sender=User)
-def assign_default_categories(sender, instance, created, **kwargs):
-    if created:
-        pass
+    if not instance.is_superuser:
+        instance.profile.save()

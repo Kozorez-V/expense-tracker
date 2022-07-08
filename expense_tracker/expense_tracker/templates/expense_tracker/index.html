@@ -2,5 +2,9 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
-<a href="{% url 'sign_up' %}">Регистрация</a> | <a href="">Войти</a>
+{% if request.user.is_authenticated %}
+<li class="last"> {{user.username}} | <a href="{% url 'logout' %}">Выйти</a></li>
+{% else %}
+<li class="last"><a href="{% url 'sign_up' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+{% endif %}
 {% endblock %}
