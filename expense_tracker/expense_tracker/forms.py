@@ -24,3 +24,17 @@ class SignUpForm(UserCreationForm):
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+
+
+class AddExpenseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].empty_label = "Категория не выбрана"
+
+    class Meta:
+        model = Expense
+        fields = ['name', 'amount', 'category', 'date']
+        widgets = {
+            'name': forms.TextInput(),
+            'amount': forms.NumberInput(),
+        }
