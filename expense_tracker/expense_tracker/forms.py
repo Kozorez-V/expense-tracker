@@ -37,4 +37,5 @@ class AddExpenseForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(),
             'amount': forms.NumberInput(),
+            'date': forms.SelectDateWidget()
         }

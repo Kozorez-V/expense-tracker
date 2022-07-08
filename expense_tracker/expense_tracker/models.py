@@ -5,14 +5,15 @@ from django.core.validators import MinValueValidator
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
-                                primary_key=True)
+                                primary_key=True, verbose_name='Пользователь')
     limit_flag = models.BooleanField(blank=False, default=False)
-    limit = models.PositiveIntegerField(blank=True, null=True)
+    limit = models.PositiveIntegerField(blank=True, null=True, verbose_name='Лимит')
 
     class Meta:
         verbose_name = 'Профили'
@@ -20,8 +21,8 @@ class Profile(models.Model):
 
 
 class Category(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=30, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
+    name = models.CharField(max_length=30, blank=False, verbose_name='Название')
 
     def __str__(self):
         return self.name
@@ -32,11 +33,11 @@ class Category(models.Model):
 
 
 class Expense(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
-    date = models.DateField(blank=False, null=False)
-    name = models.CharField(max_length=50, blank=False)
-    amount = models.FloatField(blank=False, null=False, validators=[MinValueValidator(0.0)])
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Категория')
+    date = models.DateField(blank=False, null=False, verbose_name='Дата')
+    name = models.CharField(max_length=50, blank=False, verbose_name='Название')
+    amount = models.FloatField(blank=False, null=False, validators=[MinValueValidator(0.0)], verbose_name='Сумма')
 
     class Meta:
         verbose_name = 'Расходы'
