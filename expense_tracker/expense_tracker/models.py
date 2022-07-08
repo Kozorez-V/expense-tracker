@@ -6,6 +6,7 @@ from django.core.validators import MinValueValidator
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
@@ -16,6 +17,7 @@ class Profile(models.Model):
     class Meta:
         verbose_name = 'Профили'
         verbose_name_plural = 'Профили'
+
 
 class Category(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -28,6 +30,7 @@ class Category(models.Model):
         verbose_name = 'Категории'
         verbose_name_plural = 'Категории'
 
+
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
@@ -39,6 +42,7 @@ class Expense(models.Model):
         verbose_name = 'Расходы'
         verbose_name_plural = 'Расходы'
         ordering = ['date', 'category']
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -57,6 +61,7 @@ def create_user_profile(sender, instance, created, **kwargs):
                 Category(user=instance, name='Домашние животные'),
             ]
         )
+
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):

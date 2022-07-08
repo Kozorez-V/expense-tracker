@@ -10,6 +10,21 @@ def index(request):
     return render(request, 'expense_tracker/index.html', {'title': 'Главная страница'})
 
 
+def add_expense(request):
+    if request.method == 'POST':
+        form = AddExpenseForm(request.POST)
+        if form.is_valid():
+            try:
+                Expense.objects.create(**form.cleaned_data)
+                return redirect('add_expense')
+            except:
+                form.add_error(None, 'Ошибка внесения расходов')
+        else:
+            form = AddExpenseForm()
+
+    return render(request, 'expense_tracker/add_expense.html', {'title': 'Внести расходы', 'form': form})
+
+
 class SignUpUser(CreateView):
     form_class = SignUpForm
     template_name = 'expense_tracker/sign_up.html'
