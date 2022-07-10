@@ -1,7 +1,7 @@
 {% extends 'expense_tracker/base.html' %}
 
 {% block content %}
-<h1>Добавить категорию</h1>
+<h1>{{ title }}</h1>
 <form action="{% url 'add_category' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
