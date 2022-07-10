@@ -9,10 +9,13 @@ from .forms import *
 def index(request):
     return render(request, 'expense_tracker/index.html', {'title': 'Главная страница'})
 
+def settings(request):
+    return render(request, 'expense_tracker/settings.html', {'title': 'Настройки'})
+
 
 def add_expense(request):
     if request.method == 'POST':
-        form = AddExpenseForm(request.POST)
+        form = AddExpenseForm(data=request.POST, request=request)
         if form.is_valid():
             try:
                 expense = form.save(commit=False)
@@ -22,7 +25,7 @@ def add_expense(request):
             except:
                 form.add_error(None, 'Ошибка внесения расходов')
     else:
-        form = AddExpenseForm()
+        form = AddExpenseForm(request=request)
 
     return render(request, 'expense_tracker/add_expense.html', {'form': form, 'title': 'Внести расходы'})
 

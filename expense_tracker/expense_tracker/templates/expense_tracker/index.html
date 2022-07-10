@@ -3,7 +3,9 @@
 {% block content %}
 <h1>{{ title }}</h1>
 {% if request.user.is_authenticated %}
-<li class="last"> {{user.username}} | <a href="{% url 'logout' %}">Выйти</a></li>
+<li class="last"> {{user.username}} | <a href="{% url 'add_expense' %}">Учет расходов</a>
+    | <a href="{% url 'settings' %}">Настройки</a>
+    | <a href="{% url 'logout' %}">Выйти</a></li>
 {% else %}
 <li class="last"><a href="{% url 'sign_up' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
 {% endif %}

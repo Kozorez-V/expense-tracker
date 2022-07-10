@@ -5,6 +5,6 @@
 <form action="{% url 'add_expense' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Добавить</button>
+    <button type="submit">Добавить</button> | <a href="{% url 'home' %}">Назад</a>
 </form>
 {% endblock %}

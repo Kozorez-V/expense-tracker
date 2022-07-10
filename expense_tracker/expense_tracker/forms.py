@@ -28,8 +28,10 @@ class LoginUserForm(AuthenticationForm):
 
 class AddExpenseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        self.request = kwargs.pop('request')
+        super(AddExpenseForm, self).__init__(*args, **kwargs)
         self.fields['category'].empty_label = "Категория не выбрана"
+        self.fields['category'].queryset = Category.objects.filter(user=self.request.user)
 
     class Meta:
         model = Expense
@@ -37,5 +39,6 @@ class AddExpenseForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(),
             'amount': forms.NumberInput(),
+            'category': forms.Select(),
             'date': forms.SelectDateWidget()
         }
