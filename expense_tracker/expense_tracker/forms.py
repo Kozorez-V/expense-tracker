@@ -42,3 +42,12 @@ class AddExpenseForm(forms.ModelForm):
             'category': forms.Select(),
             'date': forms.SelectDateWidget()
         }
+
+
+class AddCategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput()
+        }

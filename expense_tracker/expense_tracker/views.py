@@ -1,6 +1,6 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
 from .forms import *
@@ -12,6 +12,23 @@ def index(request):
 
 def settings(request):
     return render(request, 'expense_tracker/settings.html', {'title': 'Настройки'})
+
+
+def add_category(request):
+    if request.method == 'POST':
+        form = AddCategoryForm(request.POST)
+        if form.is_valid():
+            try:
+                category = form.save(commit=False)
+                category.user = request.user
+                category.save()
+                return redirect('settings')
+            except:
+                form.add_error(None, 'Ошибка добавления категории')
+    else:
+        form = AddCategoryForm()
+
+    return render(request, 'expense_tracker/add_category.html', {'form': form, 'title': 'Добавить категорию'})
 
 
 def add_expense(request):
