@@ -55,6 +55,11 @@ def edit_category(request, pk):
                                                                   'button': 'Изменить'})
 
 
+def delete_category(request, pk):
+    get_object_or_404(Category, pk=pk).delete()
+    return redirect('settings')
+
+
 def add_expense(request):
     if request.method == 'POST':
         form = AddExpenseForm(data=request.POST, request=request)
