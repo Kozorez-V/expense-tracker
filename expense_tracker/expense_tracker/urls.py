@@ -10,5 +10,5 @@ urlpatterns = [
     path('add_expense/', add_expense, name='add_expense'),
     path('settings/', settings, name='settings'),
     path('add_category/', add_category, name='add_category'),
-    path('category/<int:pk>/', edit_category, name='edit_category')
+    path('category/<int:pk>/edit', edit_category, name='edit_category')
 ]

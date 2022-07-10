@@ -8,7 +8,7 @@
 <ul>
          {% for c in categories %}
          <li>
-                   <p>{{c.name}} | <a href="{% url 'edit_category' pk=c.pk %}">Изменить</a></p>
+                   <p>{{c.name}} | <a href="{% url 'edit_category' c.pk %}">Изменить</a></p>
          </li>
          {% endfor %}
 </ul>

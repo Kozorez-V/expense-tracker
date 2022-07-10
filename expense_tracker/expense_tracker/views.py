@@ -30,7 +30,9 @@ def add_category(request):
     else:
         form = AddCategoryForm()
 
-    return render(request, 'expense_tracker/add_category.html', {'form': form, 'title': 'Добавить категорию'})
+    return render(request, 'expense_tracker/category_form.html', {'form': form,
+                                                                  'title': 'Добавить категорию',
+                                                                  'button': 'Добавить'})
 
 
 def edit_category(request, pk):
@@ -48,7 +50,9 @@ def edit_category(request, pk):
     else:
         form = AddCategoryForm(instance=category)
 
-    return render(request, 'expense_tracker/edit_category.html', {'form': form, 'title': 'Редактировать категорию'})
+    return render(request, 'expense_tracker/category_form.html', {'form': form,
+                                                                  'title': 'Редактировать категорию',
+                                                                  'button': 'Изменить'})
 
 
 def add_expense(request):
