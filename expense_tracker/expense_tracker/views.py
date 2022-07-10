@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
@@ -58,7 +59,7 @@ def edit_category(request, pk):
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if Expense.objects.filter(category=category).exists():
-        print('Oops')
+        messages.warning(request, 'Категория содержит расходы')
     else:
         category.delete()
 
