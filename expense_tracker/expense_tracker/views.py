@@ -9,6 +9,7 @@ from .forms import *
 def index(request):
     return render(request, 'expense_tracker/index.html', {'title': 'Главная страница'})
 
+
 def settings(request):
     return render(request, 'expense_tracker/settings.html', {'title': 'Настройки'})
 
