@@ -56,7 +56,12 @@ def edit_category(request, pk):
 
 
 def delete_category(request, pk):
-    get_object_or_404(Category, pk=pk).delete()
+    category = get_object_or_404(Category, pk=pk)
+    if Expense.objects.filter(category=category).exists():
+        print('Oops')
+    else:
+        category.delete()
+
     return redirect('settings')
 
 
