@@ -1,6 +1,6 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView
 
 from .forms import *
@@ -15,7 +15,9 @@ def add_expense(request):
         form = AddExpenseForm(request.POST)
         if form.is_valid():
             try:
-                form.save()
+                expense = form.save(commit=False)
+                expense.user = request.user
+                expense.save()
                 return redirect('add_expense')
             except:
                 form.add_error(None, 'Ошибка внесения расходов')
