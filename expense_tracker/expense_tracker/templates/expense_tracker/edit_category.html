@@ -1,0 +1,10 @@
+{% extends 'expense_tracker/base.html' %}
+
+{% block content %}
+<h1>Добавить категорию</h1>
+<form action="{% url 'edit_category' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Изменить</button> | <a href="{% url 'home' %}">Назад</a>
+</form>
+{% endblock %}

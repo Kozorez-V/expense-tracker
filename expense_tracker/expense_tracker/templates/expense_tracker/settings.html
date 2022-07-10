@@ -5,5 +5,14 @@
 
 <a href="{% url 'add_category' %}">Добавить</a>
 
+<ul>
+         {% for c in categories %}
+         <li>
+                   <p>{{c.name}}</p>
+                   <hr>
+         </li>
+         {% endfor %}
+</ul>
+
 <a href="{% url 'home' %}">Назад</a>
 {% endblock %}

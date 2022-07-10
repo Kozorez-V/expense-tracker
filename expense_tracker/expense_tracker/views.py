@@ -11,10 +11,28 @@ def index(request):
 
 
 def settings(request):
-    return render(request, 'expense_tracker/settings.html', {'title': 'Настройки'})
+    categories = Category.objects.filter(user=request.user)
+
+    return render(request, 'expense_tracker/settings.html', {'title': 'Настройки', 'categories': categories})
 
 
 def add_category(request):
+    if request.method == 'POST':
+        form = AddCategoryForm(request.POST)
+        if form.is_valid():
+            try:
+                category = form.save(commit=False)
+                category.user = request.user
+                category.save()
+                return redirect('settings')
+            except:
+                form.add_error(None, 'Ошибка добавления категории')
+    else:
+        form = AddCategoryForm()
+
+    return render(request, 'expense_tracker/add_category.html', {'form': form, 'title': 'Добавить категорию'})
+
+def edit_category(request):
     if request.method == 'POST':
         form = AddCategoryForm(request.POST)
         if form.is_valid():
