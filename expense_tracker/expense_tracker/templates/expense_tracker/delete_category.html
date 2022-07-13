@@ -3,24 +3,26 @@
 {% block content %}
 <form method="POST">
     {% csrf_token %}
-    <h1>Вы уверены, что хотите удалить категорию {{ category }}?</h1>
 
     {% if messages %}
-    <ul class="messages">
+    <p class="messages">
         {% for message in messages %}
-            <li class="{{ message.tags }}">
-                {{ message|safe }}
-            </li>
+            <p class="{{ message.tags }}">
+                <h3>{{ message|safe }}</h3>
+            </p>
         {% endfor %}
-    </ul>
     {% endif %}
 
     {% for expense in expenses %}
     <p>{{ expense.name }} | {{ expense.date }} | {{ expense.amount }}</p>
     {% endfor %}
 
-    <button type="submit" name="yes">Удалить категорию</button>
-    | <button type="submit" name="transfer expenses">Перенести расходы</button>
-    | <a href="{% url 'settings' %}">Вернуться</a>
+    {% if expenses %}
+    <p><a href="{% url 'transfer_expenses' %}">Перенести расходы</a></p>
+    {% endif %}
+
+    <h3>Вы уверены, что хотите удалить категорию {{ category }}?</h3>
+
+    <p><button type="submit">Да</button> | <a href="{% url 'settings' %}">Нет</a></p>
 </form>
 {% endblock %}

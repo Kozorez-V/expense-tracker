@@ -65,11 +65,17 @@ def delete_category(request, pk):
     else:
         messages.info(request, f'Категория {category.name} пуста')
 
-    
+    if request.method == 'POST':
+        category.delete()
+        return redirect('settings')
 
     return render(request, 'expense_tracker/delete_category.html', {'title': 'Удаление категории',
                                                                     'category': category.name,
                                                                     'expenses': expenses})
+
+
+def transfer_expenses(request):
+    return render(request, 'expense_tracker/transfer_expenses.html')
 
 
 def add_expense(request):
