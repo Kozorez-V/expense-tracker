@@ -75,11 +75,6 @@ def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     expenses = Expense.objects.filter(category=category)
 
-    expenses_pk = []
-
-    for expense in expenses:
-        expenses_pk.append(expense)
-
     if expenses.exists():
         messages.warning(request, f'Категория {category.name} содержит расходы')
     else:
@@ -92,15 +87,39 @@ def delete_category(request, pk):
     context = {
         'title': 'Удаление категории',
         'category': category.name,
-        'expenses': expenses,
-        'expenses_pk': expenses_pk
+        'category_pk': category.pk,
+        'expenses': expenses
     }
 
     return render(request, 'expense_tracker/delete_category.html', context)
 
 
-def transfer_expenses(request):
-    return render(request, 'expense_tracker/transfer_expenses.html')
+def transfer_expenses(request, category_pk):
+    category = get_object_or_404(Category, pk=category_pk)  # миксин (пользовательсикий тег?)
+    expenses = Expense.objects.get(pk=18)  # миксин (пользовательсикий тег?)
+
+    # for expense in expenses:
+    #     print(expense)
+
+    if request.method == 'POST':
+        form = RestrictedExpenseForm(request.POST, instance=expenses)
+        if form.is_valid():
+            try:
+                expenses = form.save(commit=False)
+                expenses.save()
+                return redirect('settings')
+            except:
+                form.add_error(None, 'Ошибка редактирования расходов')
+    else:
+        form = RestrictedExpenseForm(instance=expenses)
+
+    context = {
+        'form': form,
+        'title': 'Перенести расходы',
+        'button': 'Изменить'
+    }
+
+    return render(request, 'expense_tracker/transfer_expenses.html', context)
 
 
 def add_expense(request):

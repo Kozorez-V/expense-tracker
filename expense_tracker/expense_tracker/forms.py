@@ -51,3 +51,9 @@ class AddCategoryForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput()
         }
+
+
+class RestrictedExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Expense
+        exclude = ['name', 'amount', 'date']
