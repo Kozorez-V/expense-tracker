@@ -1,0 +1,26 @@
+{% extends 'expense_tracker/base.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <h1>Вы уверены, что хотите удалить категорию {{ category }}?</h1>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">
+                {{ message|safe }}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% for expense in expenses %}
+    <p>{{ expense.name }} | {{ expense.date }} | {{ expense.amount }}</p>
+    {% endfor %}
+
+    <button type="submit" name="yes">Удалить категорию</button>
+    | <button type="submit" name="transfer expenses">Перенести расходы</button>
+    | <a href="{% url 'settings' %}">Вернуться</a>
+</form>
+{% endblock %}

@@ -58,12 +58,13 @@ def edit_category(request, pk):
 
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
-    if Expense.objects.filter(category=category).exists():
-        messages.warning(request, 'Категория содержит расходы')
-    else:
-        category.delete()
+    expenses = Expense.objects.filter(category=category)
+    if expenses.exists():
+        messages.warning(request, f'Категория {category.name} содержит расходы')
 
-    return redirect('settings')
+    return render(request, 'expense_tracker/delete_category.html', {'title': 'Удаление категории',
+                                                                    'category': category.name,
+                                                                    'expenses': expenses})
 
 
 def add_expense(request):
