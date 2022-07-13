@@ -8,13 +8,20 @@ from .forms import *
 
 
 def index(request):
-    return render(request, 'expense_tracker/index.html', {'title': 'Главная страница'})
+    context = {
+        'title': 'Главная страница'
+    }
+    return render(request, 'expense_tracker/index.html', context)
 
 
 def settings(request):
     categories = Category.objects.filter(user=request.user)
+    context = {
+        'title': 'Настройки',
+        'categories': categories
+    }
 
-    return render(request, 'expense_tracker/settings.html', {'title': 'Настройки', 'categories': categories})
+    return render(request, 'expense_tracker/settings.html', context)
 
 
 def add_category(request):
@@ -31,9 +38,13 @@ def add_category(request):
     else:
         form = AddCategoryForm()
 
-    return render(request, 'expense_tracker/category_form.html', {'form': form,
-                                                                  'title': 'Добавить категорию',
-                                                                  'button': 'Добавить'})
+    context = {
+        'form': form,
+        'title': 'Добавить категорию',
+        'button': 'Добавить'
+    }
+
+    return render(request, 'expense_tracker/category_form.html', context)
 
 
 def edit_category(request, pk):
@@ -51,14 +62,23 @@ def edit_category(request, pk):
     else:
         form = AddCategoryForm(instance=category)
 
-    return render(request, 'expense_tracker/category_form.html', {'form': form,
-                                                                  'title': 'Редактировать категорию',
-                                                                  'button': 'Изменить'})
+    context = {
+        'form': form,
+        'title': 'Редактировать категорию',
+        'button': 'Изменить'
+    }
+
+    return render(request, 'expense_tracker/category_form.html', context)
 
 
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     expenses = Expense.objects.filter(category=category)
+
+    expenses_pk = []
+
+    for expense in expenses:
+        expenses_pk.append(expense)
 
     if expenses.exists():
         messages.warning(request, f'Категория {category.name} содержит расходы')
@@ -69,9 +89,14 @@ def delete_category(request, pk):
         category.delete()
         return redirect('settings')
 
-    return render(request, 'expense_tracker/delete_category.html', {'title': 'Удаление категории',
-                                                                    'category': category.name,
-                                                                    'expenses': expenses})
+    context = {
+        'title': 'Удаление категории',
+        'category': category.name,
+        'expenses': expenses,
+        'expenses_pk': expenses_pk
+    }
+
+    return render(request, 'expense_tracker/delete_category.html', context)
 
 
 def transfer_expenses(request):
@@ -92,7 +117,12 @@ def add_expense(request):
     else:
         form = AddExpenseForm(request=request)
 
-    return render(request, 'expense_tracker/add_expense.html', {'form': form, 'title': 'Внести расходы'})
+    context = {
+        'form': form,
+        'title': 'Внести расходы'
+    }
+
+    return render(request, 'expense_tracker/add_expense.html', context)
 
 
 class SignUpUser(CreateView):
