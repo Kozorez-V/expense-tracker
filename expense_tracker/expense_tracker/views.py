@@ -97,8 +97,6 @@ def delete_category(request, pk):
 def transfer_expenses(request, category_pk):
     category = get_object_or_404(Category, pk=category_pk)  # миксин (пользовательсикий тег?)
     expenses = Expense.objects.filter(category=category)  # миксин (пользовательсикий тег?)
-    # for expense in expenses:
-    #     print(expense)
 
     if request.method == 'POST':
         form = RestrictedExpenseForm(data=request.POST, request=request)

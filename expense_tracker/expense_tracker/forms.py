@@ -53,13 +53,6 @@ class AddCategoryForm(forms.ModelForm):
         }
 
 
-class RestrictedExpenseForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request')
-        super(RestrictedExpenseForm, self).__init__(*args, **kwargs)
-        self.fields['category'].empty_label = "Категория не выбрана"
-        self.fields['category'].queryset = Category.objects.filter(user=self.request.user)
-
-    class Meta:
-        model = Expense
-        fields = ['category']
+class RestrictedExpenseForm(AddExpenseForm):
+    class Meta(AddExpenseForm.Meta):
+        exclude = ['name', 'amount', 'date']
