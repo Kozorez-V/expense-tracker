@@ -96,22 +96,21 @@ def delete_category(request, pk):
 
 def transfer_expenses(request, category_pk):
     category = get_object_or_404(Category, pk=category_pk)  # миксин (пользовательсикий тег?)
-    expenses = Expense.objects.get(pk=18)  # миксин (пользовательсикий тег?)
-
+    expenses = Expense.objects.filter(category=category)  # миксин (пользовательсикий тег?)
     # for expense in expenses:
     #     print(expense)
 
     if request.method == 'POST':
-        form = RestrictedExpenseForm(request.POST, instance=expenses)
+        form = RestrictedExpenseForm(data=request.POST, request=request)
         if form.is_valid():
-            try:
-                expenses = form.save(commit=False)
-                expenses.save()
-                return redirect('settings')
-            except:
-                form.add_error(None, 'Ошибка редактирования расходов')
+            category_user = form.cleaned_data.get('category')
+            for expense in expenses:
+                expense.category = category_user
+                expense.user = request.user
+                expense.save()
+            return redirect('settings')
     else:
-        form = RestrictedExpenseForm(instance=expenses)
+        form = RestrictedExpenseForm(request=request)
 
     context = {
         'form': form,
