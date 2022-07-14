@@ -127,7 +127,7 @@ def add_expense(request):
                 expense = form.save(commit=False)
                 expense.user = request.user
                 expense.save()
-                return redirect('add_expense')
+                return redirect('expense_account')
             except:
                 form.add_error(None, 'Ошибка внесения расходов')
     else:
@@ -138,7 +138,7 @@ def add_expense(request):
         'title': 'Внести расходы'
     }
 
-    return render(request, 'expense_tracker/add_expense.html', context)
+    return render(request, 'expense_tracker/expense_account.html', context)
 
 
 class SignUpUser(CreateView):

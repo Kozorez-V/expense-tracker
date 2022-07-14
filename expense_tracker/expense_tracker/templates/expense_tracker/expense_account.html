@@ -1,10 +1,16 @@
 {% extends 'expense_tracker/base.html' %}
 
+{% load expense_tracker_tags %}
+
 {% block content %}
 <h1>Внести трату</h1>
-<form action="{% url 'add_expense' %}" method="post">
+<form action="{% url 'expense_account' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Добавить</button> | <a href="{% url 'home' %}">Назад</a>
 </form>
+
+
+{% expense_history '-date' %}
+
 {% endblock %}

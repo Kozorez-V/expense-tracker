@@ -17,7 +17,7 @@
          {% for c in categories %}
 
          <li>
-                   <p>{{c.name}} | <a href="{% url 'edit_category' c.pk %}">Изменить</a>
+                   <p>{{ c.name }} | <a href="{% url 'edit_category' c.pk %}">Изменить</a>
                        | <a href="{% url 'delete_category' c.pk %}">Удалить</a></p>
          </li>
          {% endfor %}

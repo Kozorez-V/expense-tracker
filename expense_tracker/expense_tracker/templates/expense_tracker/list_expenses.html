@@ -1,0 +1,19 @@
+<table cellpadding="10" rules="cols">
+	<tbody>
+		<tr>
+            <td><b>Имя</b></td>
+			<td><b>Стоимость</b></td>
+			<td><b>Категория</b></td>
+			<td><b>Дата</b></td>
+		</tr>
+        {% for expense in expenses %}
+		<tr>
+			<td>{{ expense.name }}</td>
+			<td>{{ expense.amount }}</td>
+			<td>{{ expense.category }}</td>
+			<td>{{ expense.date }}</td>
+		</tr>
+        {% endfor %}
+	</tbody>
+</table>
+
