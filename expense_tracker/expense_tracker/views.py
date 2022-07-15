@@ -166,6 +166,11 @@ def edit_expense(request, pk):
     return render(request, 'expense_tracker/expense_account.html', context)
 
 
+def delete_expense(request, pk):
+    expense = get_object_or_404(Expense, pk=pk)
+    expense.delete()
+
+    return render(request, 'expense_tracker/expense_account.html')
 
 
 class SignUpUser(CreateView):
