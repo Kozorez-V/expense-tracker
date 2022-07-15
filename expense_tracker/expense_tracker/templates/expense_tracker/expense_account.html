@@ -4,13 +4,13 @@
 
 {% block content %}
 <h1>Внести трату</h1>
-<form action="{% url 'expense_account' %}" method="post">
+<form method="POST" class="post-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Добавить</button> | <a href="{% url 'home' %}">Назад</a>
+    <button type="submit">{{ button }}</button> | <a href="{% url 'home' %}">Назад</a>
 </form>
 
 
-{% expense_history '-date' %}
+{% expense_history %}
 
 {% endblock %}

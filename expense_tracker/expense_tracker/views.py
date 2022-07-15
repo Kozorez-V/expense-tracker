@@ -135,10 +135,37 @@ def add_expense(request):
 
     context = {
         'form': form,
-        'title': 'Внести расходы'
+        'title': 'Внести расходы',
+        'button': 'Добавить'
     }
 
     return render(request, 'expense_tracker/expense_account.html', context)
+
+
+def edit_expense(request, pk):
+    expense = get_object_or_404(Expense, pk=pk)
+    if request.method == 'POST':
+        form = AddExpenseForm(request.POST, request=request, instance=expense)
+        if form.is_valid():
+            try:
+                expense = form.save(commit=False)
+                expense.user = request.user
+                expense.save()
+                return redirect('expense_account')
+            except:
+                form.add_error(None, 'Ошибка редактирования расходов')
+    else:
+        form = AddExpenseForm(request=request, instance=expense)
+
+    context = {
+        'form': form,
+        'title': 'Редактировать запись расхода',
+        'button': 'Изменить'
+    }
+
+    return render(request, 'expense_tracker/expense_account.html', context)
+
+
 
 
 class SignUpUser(CreateView):
