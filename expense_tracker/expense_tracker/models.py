@@ -37,7 +37,7 @@ class Expense(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False, verbose_name='Категория')
     date = models.DateField(blank=False, null=False, verbose_name='Дата')
     name = models.CharField(max_length=50, blank=False, verbose_name='Название')
-    amount = models.FloatField(blank=False, null=False, validators=[MinValueValidator(0.0)], verbose_name='Сумма')
+    amount = models.FloatField(blank=False, null=False, validators=[MinValueValidator(1.0)], verbose_name='Сумма')
 
     class Meta:
         verbose_name = 'Расходы'
