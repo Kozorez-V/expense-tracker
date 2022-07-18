@@ -7,7 +7,7 @@
 			<td><b>Дата</b></td>
 			<td><b>Действие</b></td>
 		</tr>
-        {% for expense in expenses %}
+        {% for expense in page_obj %}
 		<tr>
 			<td>{{ expense.name }}</td>
 			<td>{{ expense.amount }}</td>
@@ -20,3 +20,12 @@
 	</tbody>
 </table>
 
+<nav>
+	{% for p in page_obj.paginator.page_range %}
+	{% if page_obj.number == p %}
+	<b>{{ p }}</b>
+	{% else %}
+	<a href="?page={{ p }}">{{ p }}</a>
+	{% endif %}
+	{% endfor %}
+</nav>
