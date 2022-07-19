@@ -9,7 +9,7 @@ from .forms import *
 
 def index(request):
     context = {
-        'title': 'Главная страница'
+        'title': 'Трекер расходов'
     }
     return render(request, 'expense_tracker/index.html', context)
 

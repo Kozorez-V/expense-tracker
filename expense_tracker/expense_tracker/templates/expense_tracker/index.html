@@ -1,7 +1,7 @@
 {% extends 'expense_tracker/base.html' %}
 
 {% block content %}
-<h1 id="home">Трекер расходов</h1>
+<h1>{{ title }}</h1>
 {% if request.user.is_authenticated %}
 <nav class="menu"> {{user.username}} |
     <a href="{% url 'expense_account' %}">Учет расходов</a> |
