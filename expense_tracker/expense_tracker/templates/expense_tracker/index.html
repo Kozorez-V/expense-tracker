@@ -1,12 +1,13 @@
 {% extends 'expense_tracker/base.html' %}
 
 {% block content %}
-<h1>{{ title }}</h1>
+<h1 id="home">Трекер расходов</h1>
 {% if request.user.is_authenticated %}
-<li class="last"> {{user.username}} | <a href="{% url 'expense_account' %}">Учет расходов</a>
-    | <a href="{% url 'settings' %}">Настройки</a>
-    | <a href="{% url 'logout' %}">Выйти</a></li>
+<nav class="menu"> {{user.username}} |
+    <a href="{% url 'expense_account' %}">Учет расходов</a> |
+    <a href="{% url 'settings' %}">Настройки</a> |
+    <a href="{% url 'logout' %}">Выйти</a></nav>
 {% else %}
-<li class="last"><a href="{% url 'sign_up' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+<nav class="menu"><a href="{% url 'sign_up' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></nav>
 {% endif %}
 {% endblock %}
