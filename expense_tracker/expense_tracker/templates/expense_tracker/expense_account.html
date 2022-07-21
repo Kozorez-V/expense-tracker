@@ -1,15 +1,39 @@
 {% extends 'expense_tracker/base.html' %}
 
-{% load expense_tracker_tags %}
-
 {% block content %}
-<h1>Внести трату</h1>
-<form method="POST" class="post-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">{{ button }}</button> | <a href="{% url 'home' %}">Назад</a>
-</form>
 
-{% expense_history %}
+<p><a href="{% url 'add_expense' %}">Добавить</a></p>
+
+<table cellpadding="10" rules="cols">
+	<tbody>
+		<tr>
+            <td><b>Имя</b></td>
+			<td><b>Стоимость</b></td>
+			<td><b>Категория</b></td>
+			<td><b>Дата</b></td>
+			<td><b>Действие</b></td>
+		</tr>
+        {% for expense in page_obj %}
+		<tr>
+			<td>{{ expense.name }}</td>
+			<td>{{ expense.amount }}</td>
+			<td>{{ expense.category }}</td>
+			<td>{{ expense.date }}</td>
+			<td><a href="{% url 'edit_expense' expense.pk %}">Изменить</a>
+				| <a href="{% url 'delete_expense' expense.pk %}">Удалить</a></td>
+		</tr>
+        {% endfor %}
+	</tbody>
+</table>
+
+<nav>
+	{% for p in page_obj.paginator.page_range %}
+	{% if page_obj.number == p %}
+	<b>{{ p }}</b>
+	{% else %}
+	<a href="?page={{ p }}">{{ p }}</a>
+	{% endif %}
+	{% endfor %}
+</nav>
 
 {% endblock %}
