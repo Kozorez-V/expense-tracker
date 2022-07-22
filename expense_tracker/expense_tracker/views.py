@@ -14,14 +14,19 @@ def index(request):
     return render(request, 'expense_tracker/index.html', context)
 
 
-def show_category(request):
-    categories = Category.objects.filter(user=request.user)
-    context = {
-        'title': 'Настройки',
-        'categories': categories
-    }
+class ShowCategories(ListView):
+    paginate_by = 10
+    model = Category
+    context_object_name = 'categories'
+    template_name = 'expense_tracker/settings.html'
 
-    return render(request, 'expense_tracker/settings.html', context)
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Категории'
+        return context
 
 
 class ExpenseHistory(ListView):
@@ -116,7 +121,7 @@ def transfer_expenses(request, category_pk):
                 expense.category = category_user
                 expense.user = request.user
                 expense.save()
-            return redirect('settings')
+            return redirect('delete_category', pk=category_pk)
     else:
         form = RestrictedExpenseForm(request=request)
 
