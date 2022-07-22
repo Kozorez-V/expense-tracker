@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView, ListView
 
 from .forms import *
 
@@ -14,7 +14,7 @@ def index(request):
     return render(request, 'expense_tracker/index.html', context)
 
 
-def settings(request):
+def show_category(request):
     categories = Category.objects.filter(user=request.user)
     context = {
         'title': 'Настройки',
@@ -22,6 +22,16 @@ def settings(request):
     }
 
     return render(request, 'expense_tracker/settings.html', context)
+
+
+class ExpenseHistory(ListView):
+    paginate_by = 10
+    model = Expense
+    context_object_name = 'expenses'
+    template_name = 'expense_tracker/expense_history.html'
+
+    def get_queryset(self):
+        return Expense.objects.filter(user=self.request.user)
 
 
 def add_category(request):
@@ -127,7 +137,7 @@ def add_expense(request):
                 expense = form.save(commit=False)
                 expense.user = request.user
                 expense.save()
-                return redirect('expense_account')
+                return redirect('add_expense')
             except:
                 form.add_error(None, 'Ошибка внесения расходов')
     else:
@@ -139,7 +149,7 @@ def add_expense(request):
         'button': 'Добавить'
     }
 
-    return render(request, 'expense_tracker/expense_account.html', context)
+    return render(request, 'expense_tracker/add_expense.html', context)
 
 
 def edit_expense(request, pk):
@@ -151,7 +161,7 @@ def edit_expense(request, pk):
                 expense = form.save(commit=False)
                 expense.user = request.user
                 expense.save()
-                return redirect('expense_account')
+                return redirect('add_expense')
             except:
                 form.add_error(None, 'Ошибка редактирования расходов')
     else:
@@ -163,14 +173,14 @@ def edit_expense(request, pk):
         'button': 'Изменить'
     }
 
-    return render(request, 'expense_tracker/expense_account.html', context)
+    return render(request, 'expense_tracker/add_expense.html', context)
 
 
 def delete_expense(request, pk):
     expense = get_object_or_404(Expense, pk=pk)
     expense.delete()
 
-    return redirect('expense_account')
+    return redirect('add_expense')
 
 
 class SignUpUser(CreateView):

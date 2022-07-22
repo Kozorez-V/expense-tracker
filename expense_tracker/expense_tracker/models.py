@@ -42,7 +42,7 @@ class Expense(models.Model):
     class Meta:
         verbose_name = 'Расходы'
         verbose_name_plural = 'Расходы'
-        ordering = ['date', 'category']
+        ordering = ['-date', 'category']
 
 
 @receiver(post_save, sender=User)

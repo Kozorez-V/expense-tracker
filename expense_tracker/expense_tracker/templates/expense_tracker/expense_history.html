@@ -1,3 +1,13 @@
+{% extends 'expense_tracker/base.html' %}
+
+{% block content %}
+
+{% if page_obj|length == 0 %}
+
+<p>История расходов пуста</p>
+
+{% else %}
+
 <table cellpadding="10" rules="cols">
 	<tbody>
 		<tr>
@@ -29,3 +39,8 @@
 	{% endif %}
 	{% endfor %}
 </nav>
+{% endif %}
+
+<p><a href="{% url 'add_expense' %}">Назад</a></p>
+
+{% endblock %}
