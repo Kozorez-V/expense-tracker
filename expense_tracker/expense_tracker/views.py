@@ -14,6 +14,10 @@ def index(request):
     return render(request, 'expense_tracker/index.html', context)
 
 
+def statistics(request):
+    return render(request, 'expense_tracker/statistics.html')
+
+
 class ShowCategories(ListView):
     paginate_by = 10
     model = Category
@@ -110,8 +114,8 @@ def delete_category(request, pk):
 
 
 def transfer_expenses(request, category_pk):
-    category = get_object_or_404(Category, pk=category_pk)  # миксин (пользовательсикий тег?)
-    expenses = Expense.objects.filter(category=category)  # миксин (пользовательсикий тег?)
+    category = get_object_or_404(Category, pk=category_pk)  # миксин
+    expenses = Expense.objects.filter(category=category)  # миксин
 
     if request.method == 'POST':
         form = RestrictedExpenseForm(data=request.POST, request=request)
