@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
@@ -14,8 +16,21 @@ def index(request):
     return render(request, 'expense_tracker/index.html', context)
 
 
-def statistics(request):
-    return render(request, 'expense_tracker/statistics.html')
+class DailyStatistics(ListView):
+    model = Category
+    context_object_name = 'categories'
+    template_name = 'expense_tracker/statistics.html'
+
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today_expenses = Expense.objects.filter(date=date.today())
+        context['total'] = 0
+        for exp in today_expenses:
+            context['total'] += exp.amount
+        return context
 
 
 class ShowCategories(ListView):

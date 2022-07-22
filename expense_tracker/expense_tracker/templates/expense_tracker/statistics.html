@@ -2,4 +2,9 @@
 
 {% block content %}
 <h1>Статистика</h1>
+
+{% for category in categories %}
+<p>{{ category.name }}</p>
+{% endfor %}
+<p><b>Итого:</b> {{ total }}</p>
 {% endblock %}

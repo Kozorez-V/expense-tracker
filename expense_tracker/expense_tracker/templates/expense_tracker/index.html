@@ -4,7 +4,7 @@
 <h1>{{ title }}</h1>
 {% if request.user.is_authenticated %}
 {{user.username}} | <a href="{% url 'add_expense' %}">Учет расходов</a>
-    | <a href="{% url 'statistics' %}">Статистика</a>
+    | <a href="{% url 'daily_statistics' %}">Статистика</a>
     | <a href="{% url 'settings' %}">Настройки</a>
     | <a href="{% url 'logout' %}">Выйти</a>
 {% else %}
