@@ -29,7 +29,7 @@ class DailyStatistics(ListView):
         context = super().get_context_data(**kwargs)
         today_expenses = Expense.objects.filter(date=date.today())
 
-        category_total = today_expenses.values('category').annotate(total_amount=Sum('amount'))
+        context['category_total'] = today_expenses.values('category').annotate(total_amount=Sum('amount'))
 
         context['total'] = today_expenses.aggregate(Sum('amount'))
         context['max_amount'] = today_expenses.aggregate(Max('amount'))

@@ -4,9 +4,17 @@
 <h1>Статистика</h1>
 
 {% for category in categories %}
-<p>{{ category.name }}</p>
+<p>{{ category.name }}
+    {% for cat_total in category_total %}
+    {% if category.pk == cat_total.category %}
+    |
+    {{ cat_total.total_amount }}
+    {% endif %}
+    {% endfor %}
+</p>
 {% endfor %}
 <p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
 <p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
 <p><b>Итого:</b> {{ total.amount__sum }}</p>
+
 {% endblock %}
