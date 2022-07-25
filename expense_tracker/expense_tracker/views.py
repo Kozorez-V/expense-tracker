@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, ListView
-from django.db.models import Sum, Max, Min
+from django.db.models import Sum, Max, Min, Count
 
 from .forms import *
 
@@ -29,8 +29,7 @@ class DailyStatistics(ListView):
         context = super().get_context_data(**kwargs)
         today_expenses = Expense.objects.filter(date=date.today())
 
-        for exp in today_expenses:
-            print(exp.category)
+        category_total = today_expenses.values('category').annotate(total_amount=Sum('amount'))
 
         context['total'] = today_expenses.aggregate(Sum('amount'))
         context['max_amount'] = today_expenses.aggregate(Max('amount'))
