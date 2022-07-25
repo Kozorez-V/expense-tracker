@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, ListView
-from django.db.models import Sum, Max, Min, Count
+from django.db.models import Sum, Max, Min
 
 from .forms import *
 
@@ -17,10 +17,18 @@ def index(request):
     return render(request, 'expense_tracker/index.html', context)
 
 
-class DailyStatistics(ListView):
+def statistics(request):
+    context = {
+        'title': 'Статистика'
+    }
+
+    return render(request, 'expense_tracker/statistics.html', context)
+
+
+class TodayStatistics(ListView):
     model = Category
     context_object_name = 'categories'
-    template_name = 'expense_tracker/statistics.html'
+    template_name = 'expense_tracker/today_statistics.html'
 
     def get_queryset(self):
         return Category.objects.filter(user=self.request.user)
@@ -29,11 +37,13 @@ class DailyStatistics(ListView):
         context = super().get_context_data(**kwargs)
         today_expenses = Expense.objects.filter(date=date.today())
 
-        context['category_total'] = today_expenses.values('category').annotate(total_amount=Sum('amount'))
+        context['category_total'] = today_expenses.values('category').annotate(total_amount=Sum('amount', default=0.0))
 
-        context['total'] = today_expenses.aggregate(Sum('amount'))
-        context['max_amount'] = today_expenses.aggregate(Max('amount'))
-        context['min_amount'] = today_expenses.aggregate(Min('amount'))
+        context['total'] = today_expenses.aggregate(Sum('amount', default=0.0))
+        context['max_amount'] = today_expenses.aggregate(Max('amount', default=0.0))
+        context['min_amount'] = today_expenses.aggregate(Min('amount', default=0.0))
+
+        context['title'] = 'Статистика'
 
         return context
 
