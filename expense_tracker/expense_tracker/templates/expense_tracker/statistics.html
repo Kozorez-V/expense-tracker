@@ -6,5 +6,7 @@
 {% for category in categories %}
 <p>{{ category.name }}</p>
 {% endfor %}
-<p><b>Итого:</b> {{ total }}</p>
+<p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
+<p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
+<p><b>Итого:</b> {{ total.amount__sum }}</p>
 {% endblock %}
