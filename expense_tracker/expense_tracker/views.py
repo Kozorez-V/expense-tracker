@@ -70,7 +70,7 @@ class ExpenseHistory(ListView):
     template_name = 'expense_tracker/expense_history.html'
 
     def get_queryset(self):
-        return Expense.objects.filter(user=self.request.user)
+        return Expense.objects.filter(user=self.request.user).select_related('category')
 
 
 def add_category(request):
@@ -144,8 +144,8 @@ def delete_category(request, pk):
 
 
 def transfer_expenses(request, category_pk):
-    category = get_object_or_404(Category, pk=category_pk)  # миксин
-    expenses = Expense.objects.filter(category=category)  # миксин
+    category = get_object_or_404(Category, pk=category_pk)
+    expenses = Expense.objects.filter(category=category)
 
     if request.method == 'POST':
         form = RestrictedExpenseForm(data=request.POST, request=request)

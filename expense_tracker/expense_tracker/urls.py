@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 
+from mysite import settings
 from .views import *
 
 urlpatterns = [
@@ -17,5 +18,6 @@ urlpatterns = [
     path('edit_expense/<int:pk>', edit_expense, name='edit_expense'),
     path('delete_expense/<int:pk>', delete_expense, name='delete_expense'),
     path('statistics/', statistics, name='statistics'),
-    path('statistics/today/', TodayStatistics.as_view(), name='today_statistics')
+    path('statistics/today/', TodayStatistics.as_view(), name='today_statistics'),
+    path('__debug__/', include('debug_toolbar.urls'))
 ]
