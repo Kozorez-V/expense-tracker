@@ -52,7 +52,7 @@ class ShowCategories(ListView):
     paginate_by = 10
     model = Category
     context_object_name = 'categories'
-    template_name = 'expense_tracker/settings.html'
+    template_name = 'expense_tracker/category_list.html'
 
     def get_queryset(self):
         return Category.objects.filter(user=self.request.user)
@@ -81,7 +81,7 @@ def add_category(request):
                 category = form.save(commit=False)
                 category.user = request.user
                 category.save()
-                return redirect('settings')
+                return redirect('categories')
             except:
                 form.add_error(None, 'Ошибка добавления категории')
     else:
@@ -105,7 +105,7 @@ def edit_category(request, pk):
                 category = form.save(commit=False)
                 category.user = request.user
                 category.save()
-                return redirect('settings')
+                return redirect('categories')
             except:
                 form.add_error(None, 'Ошибка редактирования категории')
     else:
