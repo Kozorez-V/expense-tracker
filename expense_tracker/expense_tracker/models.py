@@ -1,9 +1,8 @@
+from datetime import date
+
 from django.db import models
 from django.contrib.auth.models import User
-from django.urls import reverse
-
 from django.core.validators import MinValueValidator
-
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -43,6 +42,19 @@ class Expense(models.Model):
         verbose_name = 'Расходы'
         verbose_name_plural = 'Расходы'
         ordering = ['-date', 'category']
+
+
+class DailyReport(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
+    date = models.DateField(blank=False, null=False, verbose_name='Дата', default=date.today)
+    max = models.FloatField(blank=False, null=False, verbose_name='Максимальная трата', default=0.0)
+    min = models.FloatField(blank=False, null=False, verbose_name='Минимальная трата', default=0.0)
+    total = models.FloatField(blank=False, null=False, verbose_name='Итого', default=0.0)
+
+    class Meta:
+        verbose_name = 'Еженедельные отчеты'
+        verbose_name_plural = 'Еженедельные отчеты'
+        ordering = ['-date', 'user']
 
 
 @receiver(post_save, sender=User)
