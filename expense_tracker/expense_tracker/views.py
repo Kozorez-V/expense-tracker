@@ -131,7 +131,7 @@ def delete_category(request, pk):
 
     if request.method == 'POST':
         category.delete()
-        return redirect('settings')
+        return redirect('categories')
 
     context = {
         'title': 'Удаление категории',

@@ -7,22 +7,28 @@
 
 <p>Список категорий пуст</p>
 
-<a href="{% url 'add_category' %}">Добавить</a>
+<p><a href="{% url 'add_category' %}">Добавить</a></p>
 
 {% else %}
 
-<a href="{% url 'add_category' %}">Добавить</a>
+<table cellpadding="10" rules="cols">
+	<tbody>
+		<tr>
+            <td><b>Категория</b></td>
+			<td><b>Действие</b></td>
+		</tr>
+        {% for c in categories %}
+		<tr>
+			<td>{{ c.name }}</td>
+            <td><a href="{% url 'edit_category' c.pk %}">Изменить</a>
+            | <a href="{% url 'delete_category' c.pk %}">Удалить</a></td>
+		</tr>
+        {% endfor %}
 
-<ul>
-         {% for c in categories %}
+	</tbody>
+</table>
 
-         <li>
-                   <p>{{ c.name }} | <a href="{% url 'edit_category' c.pk %}">Изменить</a>
-                       | <a href="{% url 'delete_category' c.pk %}">Удалить</a></p>
-         </li>
-         {% endfor %}
-    {% endif %}
-</ul>
+{% endif %}
 
-<a href="{% url 'home' %}">Назад</a>
+<p><a href="{% url 'add_category' %}">Добавить</a> <a href="{% url 'home' %}">Назад</a></p>
 {% endblock %}
