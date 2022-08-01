@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Expense, Category, DailyReport
+from .models import Profile, Expense, Category
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -20,13 +20,6 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('user', 'name')
 
 
-class DailyReportAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'date')
-    list_display_links = ('pk', 'date')
-    search_fields = ('user', 'date')
-
-
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(DailyReport, DailyReportAdmin)

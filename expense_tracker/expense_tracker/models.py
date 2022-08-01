@@ -44,19 +44,6 @@ class Expense(models.Model):
         ordering = ['-date', 'category']
 
 
-class DailyReport(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
-    date = models.DateField(blank=False, null=False, verbose_name='Дата', default=date.today)
-    max = models.FloatField(blank=False, null=False, verbose_name='Максимальная трата', default=0.0)
-    min = models.FloatField(blank=False, null=False, verbose_name='Минимальная трата', default=0.0)
-    total = models.FloatField(blank=False, null=False, verbose_name='Итого', default=0.0)
-
-    class Meta:
-        verbose_name = 'Еженедельные отчеты'
-        verbose_name_plural = 'Еженедельные отчеты'
-        ordering = ['-date', 'user']
-
-
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
