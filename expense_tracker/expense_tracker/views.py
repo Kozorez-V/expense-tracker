@@ -35,17 +35,10 @@ class TodayStatistics(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        today_expenses = Expense.objects.filter(date=date.today())
+        today_expenses = Expense.objects.filter(date=date.today(), user=self.request.user)
 
         context['category_total'] = today_expenses.values('category').annotate(total_amount=Sum('amount', default=0.0))
         context['category_total_pk'] = context['category_total'].values_list('category', flat=True)
-
-        for category in context['categories']:
-            print(f'Категория: {category.pk}, {category.name}')
-            if category.pk in context['category_total_pk']:
-                print(context['category_total'].filter(category=category.pk).values('total_amount'))
-            else:
-                print(0)
 
         context['total'] = today_expenses.aggregate(Sum('amount', default=0.0))
         context['max_amount'] = today_expenses.aggregate(Max('amount', default=0.0))

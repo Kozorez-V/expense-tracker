@@ -3,8 +3,6 @@
 {% block content %}
 <h1>{{ title }}</h1>
 
-	<p>{{ category_total_pk }}</p>
-
 <table cellpadding="10" rules="cols">
 	<tbody>
 		<tr>
@@ -12,8 +10,6 @@
 			<td><b>Всего</b></td>
 		</tr>
         {% for category in categories %}
-
-		{{ category.pk }}
 
 		<tr>
 			<td>{{ category.name }}</td>
