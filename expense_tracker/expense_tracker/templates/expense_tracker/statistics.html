@@ -3,7 +3,8 @@
 {% block content %}
 <h1>{{ title }}</h1>
 
-<a href="{% url 'today_statistics' %}">Сегодня</a>
+<p><a href="{% url 'today_statistics' %}">Сегодня</a></p>
+<p><a href="{% url 'week_statistics' %}">За неделю</a></p>
 
 <p><a href="{% url 'home' %}">Назад</a></p>
 

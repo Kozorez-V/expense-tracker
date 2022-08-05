@@ -6,6 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, ListView
 from django.db.models import Sum, Max, Min
+from django.db.models.functions import ExtractIsoWeekDay, ExtractWeek
 
 from .forms import *
 
@@ -43,6 +44,36 @@ class TodayStatistics(ListView):
         context['total'] = today_expenses.aggregate(Sum('amount', default=0.0))
         context['max_amount'] = today_expenses.aggregate(Max('amount', default=0.0))
         context['min_amount'] = today_expenses.aggregate(Min('amount', default=0.0))
+
+        context['title'] = 'Статистика'
+
+        return context
+
+
+class WeekStatistics(ListView):
+    model = Category
+    context_object_name = 'categories'
+    template_name = 'expense_tracker/week_statistics.html'
+
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_week_expenses = Expense.objects.filter(date__week=date.today().isocalendar()[1],
+                                                                  user=self.request.user)
+
+        context['category_total'] = current_week_expenses.values('category').annotate(total_amount=Sum('amount', default=0.0))
+        context['category_total_pk'] = context['category_total'].values_list('category', flat=True)
+
+        context['total'] = current_week_expenses.aggregate(Sum('amount', default=0.0))
+        context['max_amount'] = current_week_expenses.aggregate(Max('amount', default=0.0))
+        context['min_amount'] = current_week_expenses.aggregate(Min('amount', default=0.0))
+
+        # Определить текущую неделю (неделя начинается с понедельника)
+        # Сгруппировать расходы по неделе
+
+        # context['week'] = current_week_expenses.annotate(week=ExtractIsoWeekDay('date'))
 
         context['title'] = 'Статистика'
 

@@ -19,5 +19,6 @@ urlpatterns = [
     path('delete_expense/<int:pk>', delete_expense, name='delete_expense'),
     path('statistics/', statistics, name='statistics'),
     path('statistics/today/', TodayStatistics.as_view(), name='today_statistics'),
+    path('statistics/week/', WeekStatistics.as_view(), name='week_statistics'),
     path('__debug__/', include('debug_toolbar.urls'))
 ]

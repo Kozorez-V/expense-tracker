@@ -1,0 +1,51 @@
+{% extends 'expense_tracker/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<table cellpadding="10" rules="cols">
+	<tbody>
+		<tr>
+            <td><b>Категория</b></td>
+			<td><b>Всего</b></td>
+		</tr>
+        {% for category in categories %}
+
+		<tr>
+			<td>{{ category.name }}</td>
+
+			{% if category.pk in category_total_pk %}
+
+			{% for cat_total in category_total %}
+
+			{% if cat_total.category == category.pk %}
+			<td>
+				{{ cat_total.total_amount }}
+			</td>
+			{% endif %}
+
+			{% endfor %}
+
+			{% else %}
+			 <td>0.0</td>
+
+            {% endif %}
+
+		</tr>
+        {% endfor %}
+
+
+	</tbody>
+</table>
+
+<p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
+<p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
+<p><b>Итого:</b> {{ total.amount__sum }}</p>
+
+<p><a href="{% url 'statistics' %}">Назад</a></p>
+
+{% for exp in week %}
+<p>{{ exp.name }} | {{ exp.week }}</p>
+{% endfor %}
+
+{% endblock %}
