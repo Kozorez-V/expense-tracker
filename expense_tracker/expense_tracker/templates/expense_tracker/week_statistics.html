@@ -3,20 +3,10 @@
 {% block content %}
 <h1>{{ title }}</h1>
 
-{% for category in categories %}
-
-<p>{{ category.name }} |
-
-
-
-</p>
-
-{% endfor %}
 
 <p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
 <p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
 <p><b>Итого:</b> {{ total.amount__sum }}</p>
-
 
 <p><a href="{% url 'statistics' %}">Назад</a></p>
 
