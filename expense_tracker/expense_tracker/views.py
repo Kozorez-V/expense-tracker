@@ -63,34 +63,30 @@ class WeekStatistics(ListView):
         current_week_expenses = Expense.objects.filter(date__week=date.today().isocalendar()[1],
                                                        user=self.request.user)
 
-        # context['weekdays'] = {
-        #     'Понедельник': 1,
-        #     'Вторник': 2,
-        #     'Среда': 3,
-        #     'Четверг': 4,
-        #     'Пятница': 5,
-        #     'Суббота': 6,
-        #     'Воскресенье': 7
-        # }
-
-        # for exp in current_week_expenses:
-        #     print(exp.name, exp.date, exp.amount)
+        days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
 
         context['category_total'] = current_week_expenses.values('category') \
             .annotate(total_amount=Sum('amount', default=0.0))
         context['category_total_pk'] = context['category_total'].values_list('category', flat=True)
 
+        print(context['category_total_pk'])
+
         context['total'] = current_week_expenses.aggregate(Sum('amount', default=0.0))
         context['max_amount'] = current_week_expenses.aggregate(Max('amount', default=0.0))
         context['min_amount'] = current_week_expenses.aggregate(Min('amount', default=0.0))
 
-        expenses_by_weekday = current_week_expenses.values('category', 'date')\
-            .annotate(total=Count(ExtractIsoWeekDay('date')))
+        expenses_by_weekday = current_week_expenses.values('category', 'date') \
+            .annotate(weekday=ExtractIsoWeekDay('date'))
 
-        weekday_total = expenses_by_weekday.annotate(Sum('amount'))
+        context['weekday_total'] = expenses_by_weekday.annotate(Sum('amount'))
 
-        for el in weekday_total:
-            print(el)
+        for category in context['categories']:
+            print(f'Категория: {category.name}')
+            for exp in context['weekday_total']:
+                if exp['category'] == category.pk:
+                    for number in range(len(days)):
+                        if exp['weekday'] == number + 1:
+                            print(f'Расход: {exp} \n День недели: {days[number]}')
 
         context['title'] = 'Статистика'
 
