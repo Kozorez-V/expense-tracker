@@ -4,38 +4,38 @@
 <h1>{{ title }}</h1>
 
 <table cellpadding="10" rules="cols">
-	<tbody>
-		<tr>
-            <td><b>Категория</b></td>
-			<td><b>Всего</b></td>
-		</tr>
-        {% for category in categories %}
+    <tbody>
+    <tr>
+        <td><b>Категория</b></td>
+        <td><b>Всего</b></td>
+    </tr>
+    {% for category in categories %}
 
-		<tr>
-			<td>{{ category.name }}</td>
+    <tr>
+        <td>{{ category.name }}</td>
 
-			{% if category.pk in category_total_pk %}
+        {% if category.pk in category_total_pk %}
 
-			{% for cat_total in category_total %}
+        {% for cat_total in category_total %}
 
-			{% if cat_total.category == category.pk %}
-			<td>
-				{{ cat_total.total_amount }}
-			</td>
-			{% endif %}
+        {% if cat_total.category == category.pk %}
+        <td>
+            {{ cat_total.total_amount }}
+        </td>
+        {% endif %}
 
-			{% endfor %}
-
-			{% else %}
-			 <td>0.0</td>
-
-            {% endif %}
-
-		</tr>
         {% endfor %}
 
+        {% else %}
+        <td>0.0</td>
 
-	</tbody>
+        {% endif %}
+
+    </tr>
+    {% endfor %}
+
+
+    </tbody>
 </table>
 
 <p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>

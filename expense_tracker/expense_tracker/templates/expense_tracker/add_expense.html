@@ -5,9 +5,10 @@
 <form method="POST" class="post-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{{ button }}</button> | <a href="{% url 'home' %}">Назад</a>
+    <button type="submit">{{ button }}</button>
+    | <a href="{% url 'home' %}">Назад</a>
 </form>
 
 <p><a href="{% url 'expense_history' %}">История расходов</a></p>
 
-{% endblock %}s
+{% endblock %}

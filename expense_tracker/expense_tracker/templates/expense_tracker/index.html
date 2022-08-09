@@ -4,9 +4,9 @@
 <h1>{{ title }}</h1>
 {% if request.user.is_authenticated %}
 {{user.username}} | <a href="{% url 'add_expense' %}">Учет расходов</a>
-    | <a href="{% url 'statistics' %}">Статистика</a>
-    | <a href="{% url 'categories' %}">Категории</a>
-    | <a href="{% url 'logout' %}">Выйти</a>
+| <a href="{% url 'statistics' %}">Статистика</a>
+| <a href="{% url 'categories' %}">Категории</a>
+| <a href="{% url 'logout' %}">Выйти</a>
 {% else %}
 <a href="{% url 'sign_up' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a>
 {% endif %}

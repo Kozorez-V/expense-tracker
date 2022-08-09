@@ -7,10 +7,10 @@
     {% if messages %}
     <p class="messages">
         {% for message in messages %}
-            <p class="{{ message.tags }}">
-                <h3>{{ message|safe }}</h3>
-            </p>
-        {% endfor %}
+    <p class="{{ message.tags }}">
+    <h3>{{ message|safe }}</h3>
+    </p>
+    {% endfor %}
     {% endif %}
 
     {% for expense in expenses %}
@@ -23,6 +23,8 @@
 
     <h3>Вы уверены, что хотите удалить категорию {{ category }}?</h3>
 
-    <p><button type="submit">Да</button> | <a href="{% url 'categories' %}">Нет</a></p>
+    <p>
+        <button type="submit">Да</button>
+        | <a href="{% url 'categories' %}">Нет</a></p>
 </form>
 {% endblock %}

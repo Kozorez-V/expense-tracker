@@ -84,11 +84,16 @@ class WeekStatistics(ListView):
                 for exp in expenses_by_weekday:
                     if exp['category'] == category.pk:
                         if exp['weekday'] == number + 1:
-                            print(days[number])
                             weekday_total[days[number]][category.name] = exp['amount__sum']
-                            print(weekday_total)
 
-        # print(weekday_total)
+        # for weekday, expense in weekday_total.items():
+        #     print(weekday)
+        #     for category, amount in expense.items():
+        #         print(f'Категория: {category} \n Сумма: {amount}')
+
+        context['table_headers'] = list(weekday_total)
+
+        print(weekday_total)
         context['weekday_total'] = weekday_total
         context['title'] = 'Еженедельная статистика'
 

@@ -10,20 +10,20 @@
 {% else %}
 
 <table cellpadding="10" rules="cols">
-	<tbody>
-		<tr>
-            <td><b>Категория</b></td>
-			<td><b>Действие</b></td>
-		</tr>
-        {% for c in categories %}
-		<tr>
-			<td>{{ c.name }}</td>
-            <td><a href="{% url 'edit_category' c.pk %}">Изменить</a>
+    <tbody>
+    <tr>
+        <td><b>Категория</b></td>
+        <td><b>Действие</b></td>
+    </tr>
+    {% for c in categories %}
+    <tr>
+        <td>{{ c.name }}</td>
+        <td><a href="{% url 'edit_category' c.pk %}">Изменить</a>
             | <a href="{% url 'delete_category' c.pk %}">Удалить</a></td>
-		</tr>
-        {% endfor %}
+    </tr>
+    {% endfor %}
 
-	</tbody>
+    </tbody>
 </table>
 
 {% endif %}
