@@ -76,19 +76,21 @@ class WeekStatistics(ListView):
         expenses_by_weekday = current_week_expenses.values('category', 'date') \
             .annotate(weekday=ExtractIsoWeekDay('date')).annotate(Sum('amount'))
 
-        weekday_statistics = {}
+        weekday_total = {}
 
-        for category in context['categories']:
-            # print(f'Категория: {category.name}')
-            weekday_statistics[category.name] = {}
-            for exp in expenses_by_weekday:
-                if exp['category'] == category.pk:
-                    for number in range(len(days)):
+        for number in range(len(days)):
+            weekday_total[days[number]] = {}
+            for category in context['categories']:
+                for exp in expenses_by_weekday:
+                    if exp['category'] == category.pk:
                         if exp['weekday'] == number + 1:
-                            # print(f'Расход: {exp} \n День недели: {days[number]}')
-                            weekday_statistics[category.name][days[number]] = exp['amount__sum']
+                            print(days[number])
+                            weekday_total[days[number]][category.name] = exp['amount__sum']
+                            print(weekday_total)
 
-        context['title'] = 'Статистика'
+        # print(weekday_total)
+        context['weekday_total'] = weekday_total
+        context['title'] = 'Еженедельная статистика'
 
         return context
 

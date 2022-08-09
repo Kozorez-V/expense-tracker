@@ -3,6 +3,21 @@
 {% block content %}
 <h1>{{ title }}</h1>
 
+<table cellpadding="10" rules="cols">
+	<tbody>
+		<tr>
+            <td><b>Категория</b></td>
+		</tr>
+
+        {% for category in categories %}
+		<tr>
+			<td>{{ category.name }}</td>
+		</tr>
+        {% endfor %}
+
+
+	</tbody>
+</table>
 
 <p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
 <p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
