@@ -87,14 +87,14 @@ class WeekStatistics(ListView):
                         if exp['weekday'] == number + 1:
                             weekday_total[days[number]][category.name] = exp['amount__sum']
 
-        # for weekday, expense in weekday_total.items():
-        #     print(weekday)
-        #     for category, amount in expense.items():
-        #         print(f'Категория: {category} \n Сумма: {amount}')
+        for weekday, expense in weekday_total.items():
+            print(weekday)
+            for category, amount in expense.items():
+                print(f'Категория: {category} \n Сумма: {amount}')
 
         context['weekdays'] = days
 
-        print(weekday_total)
+        # print(weekday_total)
         context['weekday_total'] = weekday_total
         context['title'] = 'Еженедельная статистика'
 

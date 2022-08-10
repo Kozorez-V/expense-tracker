@@ -5,8 +5,12 @@
 
 <table cellpadding="10" rules="cols">
     <tbody>
-    
+
     <tr>
+        <td>
+            <b>Категория</b>
+        </td>
+
         {% for weekday in weekdays %}
         <td>
             <b>{{ weekday }}</b>
@@ -14,13 +18,24 @@
         {% endfor %}
     </tr>
 
+    {% for category in categories %}
     <tr>
+        <td>
+            {{ category }}
+        </td>
+
         {% for weekday, expense in weekday_total.items %}
         <td>
-            {{ expense }}
+            {% for cat, amount in expense.items %}
+            {% if category.name == cat %}
+            {{ amount }}
+            {% endif %}
+            {% endfor %}
         </td>
+
         {% endfor %}
     </tr>
+    {% endfor %}
 
     </tbody>
 </table>
