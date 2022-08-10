@@ -3,12 +3,27 @@
 {% block content %}
 <h1>{{ title }}</h1>
 
-{% for weekday, expense in weekday_total.items %}
-<p><b>{{ weekday }}</b></p>
-{% for cat, amount in expense.items %}
-<p>{{ cat }} {{ amount }}</p>
-{% endfor %}
-{% endfor %}
+<table cellpadding="10" rules="cols">
+    <tbody>
+    
+    <tr>
+        {% for weekday in weekdays %}
+        <td>
+            <b>{{ weekday }}</b>
+        </td>
+        {% endfor %}
+    </tr>
+
+    <tr>
+        {% for weekday, expense in weekday_total.items %}
+        <td>
+            {{ expense }}
+        </td>
+        {% endfor %}
+    </tr>
+
+    </tbody>
+</table>
 
 <p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
 <p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>

@@ -38,7 +38,8 @@ class TodayStatistics(ListView):
         context = super().get_context_data(**kwargs)
         today_expenses = Expense.objects.filter(date=date.today(), user=self.request.user)
 
-        context['category_total'] = today_expenses.values('category').annotate(total_amount=Sum('amount', default=0.0))
+        context['category_total'] = today_expenses.values('category') \
+            .annotate(total_amount=Sum('amount', default=0.0))
         context['category_total_pk'] = context['category_total'].values_list('category', flat=True)
 
         context['total'] = today_expenses.aggregate(Sum('amount', default=0.0))
@@ -63,8 +64,6 @@ class WeekStatistics(ListView):
         current_week_expenses = Expense.objects.filter(date__week=date.today().isocalendar()[1],
                                                        user=self.request.user)
 
-        days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-
         context['category_total'] = current_week_expenses.values('category') \
             .annotate(total_amount=Sum('amount', default=0.0))
         context['category_total_pk'] = context['category_total'].values_list('category', flat=True)
@@ -75,6 +74,8 @@ class WeekStatistics(ListView):
 
         expenses_by_weekday = current_week_expenses.values('category', 'date') \
             .annotate(weekday=ExtractIsoWeekDay('date')).annotate(Sum('amount'))
+
+        days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
 
         weekday_total = {}
 
@@ -91,7 +92,7 @@ class WeekStatistics(ListView):
         #     for category, amount in expense.items():
         #         print(f'Категория: {category} \n Сумма: {amount}')
 
-        context['table_headers'] = list(weekday_total)
+        context['weekdays'] = days
 
         print(weekday_total)
         context['weekday_total'] = weekday_total
