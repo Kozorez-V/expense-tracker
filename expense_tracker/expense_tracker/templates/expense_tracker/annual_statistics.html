@@ -7,16 +7,49 @@
 
 <table cellpadding="10" rules="cols">
     <tbody>
+
     <tr>
-        <td><b>Категория</b></td>
-        <td><b>Всего</b></td>
+        <td>
+            <b>Категория</b>
+        </td>
+
+        {% for month in months %}
+        <td>
+            <b>{{ month }}</b>
+        </td>
+        {% endfor %}
+
+        <td>
+            <b>Всего</b>
+        </td>
     </tr>
 
-
     {% for category in categories %}
-
     <tr>
-        <td>{{ category.name }}</td>
+        <td>
+            {{ category }}
+        </td>
+
+        {% for month, expense in month_total.items %}
+        <td>
+
+            {% if category.name in expense.keys %}
+
+            {% for cat, amount in expense.items %}
+
+            {% if category.name == cat %}
+            {{ amount }}
+
+            {% endif %}
+
+            {% endfor %}
+
+            {% else %}
+            0,0
+            {% endif %}
+
+        </td>
+        {% endfor %}
 
         {% if category.pk in category_total_pk %}
 
@@ -37,7 +70,6 @@
 
     </tr>
     {% endfor %}
-
 
     </tbody>
 </table>

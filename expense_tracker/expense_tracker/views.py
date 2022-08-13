@@ -3,10 +3,12 @@ from datetime import date
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, ListView
 from django.db.models import Sum, Max, Min, Count
-from django.db.models.functions import ExtractIsoWeekDay, ExtractWeek
+from django.db.models.functions import ExtractIsoWeekDay, ExtractMonth
 
 from .forms import *
 
@@ -18,15 +20,7 @@ def index(request):
     return render(request, 'expense_tracker/index.html', context)
 
 
-def statistics(request):
-    context = {
-        'title': 'Статистика'
-    }
-
-    return render(request, 'expense_tracker/statistics.html', context)
-
-
-class TodayStatistics(ListView):
+class TodayStatistics(LoginRequiredMixin, ListView):
     model = Category
     context_object_name = 'categories'
     template_name = 'expense_tracker/today_statistics.html'
@@ -53,7 +47,7 @@ class TodayStatistics(ListView):
         return context
 
 
-class WeekStatistics(ListView):
+class WeeklyStatistics(LoginRequiredMixin, ListView):
     model = Category
     context_object_name = 'categories'
     template_name = 'expense_tracker/week_statistics.html'
@@ -91,12 +85,57 @@ class WeekStatistics(ListView):
 
         context['weekdays'] = days
         context['weekday_total'] = weekday_total
-        context['title'] = 'Еженедельная статистика'
+        context['title'] = 'Статистика'
 
         return context
 
 
-class ShowCategories(ListView):
+class AnnualStatistics(LoginRequiredMixin, ListView):
+    model = Category
+    context_object_name = 'categories'
+    template_name = 'expense_tracker/annual_statistics.html'
+
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        current_year_expenses = Expense.objects.filter(date__year=date.today().isocalendar()[0],
+                                                       user=self.request.user)
+
+        context['category_total'] = current_year_expenses.values('category') \
+            .annotate(total_amount=Sum('amount', default=0.0))
+        context['category_total_pk'] = context['category_total'].values_list('category', flat=True)
+
+        context['total'] = current_year_expenses.aggregate(Sum('amount', default=0.0))
+        context['max_amount'] = current_year_expenses.aggregate(Max('amount', default=0.0))
+        context['min_amount'] = current_year_expenses.aggregate(Min('amount', default=0.0))
+
+        expenses_by_month = current_year_expenses.values('category') \
+            .annotate(month=ExtractMonth('date')).values('category', 'month').annotate(Sum('amount'))
+
+        months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+
+        month_total = {}
+
+        for number in range(len(months)):
+            month_total[months[number]] = {}
+            for category in context['categories']:
+                for exp in expenses_by_month:
+                    if exp['category'] == category.pk:
+                        if exp['month'] == number + 1:
+                            month_total[months[number]][category.name] = exp['amount__sum']
+
+        context['month_total'] = month_total
+        context['months'] = months
+        context['expenses'] = current_year_expenses
+        context['title'] = 'Статистика'
+
+        return context
+
+
+class ShowCategories(LoginRequiredMixin, ListView):
     paginate_by = 10
     model = Category
     context_object_name = 'categories'
@@ -111,7 +150,7 @@ class ShowCategories(ListView):
         return context
 
 
-class ExpenseHistory(ListView):
+class ExpenseHistory(LoginRequiredMixin, ListView):
     paginate_by = 10
     model = Expense
     context_object_name = 'expenses'
@@ -121,6 +160,7 @@ class ExpenseHistory(ListView):
         return Expense.objects.filter(user=self.request.user).select_related('category')
 
 
+@login_required
 def add_category(request):
     if request.method == 'POST':
         form = AddCategoryForm(request.POST)
@@ -144,6 +184,7 @@ def add_category(request):
     return render(request, 'expense_tracker/category_form.html', context)
 
 
+@login_required
 def edit_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
@@ -168,6 +209,7 @@ def edit_category(request, pk):
     return render(request, 'expense_tracker/category_form.html', context)
 
 
+@login_required
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk)
     expenses = Expense.objects.filter(category=category)
@@ -191,6 +233,7 @@ def delete_category(request, pk):
     return render(request, 'expense_tracker/delete_category.html', context)
 
 
+@login_required
 def transfer_expenses(request, category_pk):
     category = get_object_or_404(Category, pk=category_pk)
     expenses = Expense.objects.filter(category=category)
@@ -216,6 +259,7 @@ def transfer_expenses(request, category_pk):
     return render(request, 'expense_tracker/transfer_expenses.html', context)
 
 
+@login_required
 def add_expense(request):
     if request.method == 'POST':
         form = AddExpenseForm(data=request.POST, request=request)
@@ -239,6 +283,7 @@ def add_expense(request):
     return render(request, 'expense_tracker/add_expense.html', context)
 
 
+@login_required
 def edit_expense(request, pk):
     expense = get_object_or_404(Expense, pk=pk)
     if request.method == 'POST':
@@ -263,6 +308,7 @@ def edit_expense(request, pk):
     return render(request, 'expense_tracker/add_expense.html', context)
 
 
+@login_required
 def delete_expense(request, pk):
     expense = get_object_or_404(Expense, pk=pk)
     expense.delete()
