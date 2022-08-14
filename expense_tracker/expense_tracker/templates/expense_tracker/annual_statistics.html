@@ -3,8 +3,6 @@
 {% block content %}
 <h1>{{ title }}</h1>
 
-{% include 'expense_tracker/includes/statistics_navbar.html' %}
-
 <table cellpadding="10" rules="cols">
     <tbody>
 
@@ -77,7 +75,5 @@
 <p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
 <p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
 <p><b>Итого:</b> {{ total.amount__sum }}</p>
-
-<p><a href="{% url 'home' %}">Назад</a></p>
 
 {% endblock %}

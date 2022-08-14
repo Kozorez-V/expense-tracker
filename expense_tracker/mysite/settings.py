@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'expense_tracker.apps.CatalogConfig',
     'debug_toolbar',
     'bootstrap5',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

@@ -8,15 +8,18 @@
 
 {% else %}
 
-<table cellpadding="10" rules="cols">
-    <tbody>
+<table class="table table-hover">
+    <thead class="table-light">
     <tr>
-        <td><b>Имя</b></td>
-        <td><b>Стоимость</b></td>
-        <td><b>Категория</b></td>
-        <td><b>Дата</b></td>
-        <td><b>Действие</b></td>
+        <th scope="col">Имя</th>
+        <th scope="col">Стоимость</th>
+        <th scope="col">Категория</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Действие</th>
     </tr>
+    </thead>
+
+    <tbody>
     {% for expense in page_obj %}
     <tr>
         <td>{{ expense.name }}</td>
@@ -40,7 +43,5 @@
     {% endfor %}
 </nav>
 {% endif %}
-
-<p><a href="{% url 'add_expense' %}">Назад</a></p>
 
 {% endblock %}

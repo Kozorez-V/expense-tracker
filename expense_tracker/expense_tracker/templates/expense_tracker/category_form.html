@@ -2,10 +2,14 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
+
+{% load crispy_forms_tags %}
+
 <form method="POST" class="post-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{{ button }}</button>
-    | <a href="{% url 'categories' %}">Назад</a>
+
+    <button type="submit" class="btn btn-primary">{{ button }}</button>
+    <a href="{% url 'categories' %}" class="btn btn-primary">Назад</a>
 </form>
 {% endblock %}

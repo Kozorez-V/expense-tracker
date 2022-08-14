@@ -3,18 +3,16 @@
 {% block content %}
 <h1>{{ title }}</h1>
 
-{% include 'expense_tracker/includes/statistics_navbar.html' %}
-
-<table cellpadding="10" rules="cols">
-    <tbody>
+<table class="table table-hover">
+    <thead class="table-light">
     <tr>
-        <td><b>Категория</b></td>
-        <td><b>Всего</b></td>
+        <th scope="col">Категория</th>
+        <th scope="col">Всего</th>
     </tr>
+    </thead>
 
-
+    <tbody>
     {% for category in categories %}
-
     <tr>
         <td>{{ category }}</td>
 
@@ -45,7 +43,5 @@
 <p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
 <p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
 <p><b>Итого:</b> {{ total.amount__sum }}</p>
-
-<p><a href="{% url 'home' %}">Назад</a></p>
 
 {% endblock %}
