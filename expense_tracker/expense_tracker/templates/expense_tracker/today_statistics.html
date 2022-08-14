@@ -16,15 +16,15 @@
     {% for category in categories %}
 
     <tr>
-        <td>{{ category.name }}</td>
+        <td>{{ category }}</td>
 
-        {% if category.pk in category_total_pk %}
+        {% if category.pk in nonempty_category_pk %}
 
-        {% for cat_total in category_total %}
+        {% for amount in amount_per_category %}
 
-        {% if cat_total.category == category.pk %}
+        {% if amount.category == category.pk %}
         <td>
-            {{ cat_total.total_amount }}
+            {{ amount.total_amount }}
         </td>
         {% endif %}
 

@@ -51,9 +51,9 @@
         </td>
         {% endfor %}
 
-        {% if category.pk in category_total_pk %}
+        {% if category.pk in nonempty_category_pk %}
 
-        {% for cat_total in category_total %}
+        {% for cat_total in amount_per_category %}
 
         {% if cat_total.category == category.pk %}
         <td>
