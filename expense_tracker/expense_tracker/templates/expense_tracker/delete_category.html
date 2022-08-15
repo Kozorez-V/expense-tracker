@@ -5,26 +5,20 @@
     {% csrf_token %}
 
     {% if messages %}
-    <p class="messages">
-        {% for message in messages %}
+    <p class="messages">{% for message in messages %}</p>
     <p class="{{ message.tags }}">
     <h3>{{ message|safe }}</h3>
-    </p>
     {% endfor %}
     {% endif %}
 
-    {% for expense in expenses %}
-    <p>{{ expense.name }} | {{ expense.date }} | {{ expense.amount }}</p>
-    {% endfor %}
-
     {% if expenses %}
-    <p><a href="{% url 'transfer_expenses' category_pk %}">Перенести расходы</a></p>
+    <p><a href="{% url 'transfer_expenses' category_pk %}" class="btn btn-success">Перенести расходы</a></p>
     {% endif %}
 
     <h3>Вы уверены, что хотите удалить категорию {{ category }}?</h3>
 
     <p>
-        <button type="submit">Да</button>
-        | <a href="{% url 'categories' %}">Нет</a></p>
+        <button type="submit" class="btn btn-danger">Да</button>
+        <a href="{% url 'categories' %}" class="btn btn-dark">Нет</a></p>
 </form>
 {% endblock %}

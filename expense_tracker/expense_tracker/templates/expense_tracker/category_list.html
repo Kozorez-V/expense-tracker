@@ -1,7 +1,9 @@
 {% extends 'expense_tracker/base.html' %}
 
+{% load static %}
+
 {% block content %}
-<h1>{{ title }}</h1>
+<h1 class="display-6">{{ title }}</h1>
 
 {% if categories|length == 0 %}
 
@@ -20,8 +22,24 @@
     {% for c in categories %}
     <tr>
         <td>{{ c.name }}</td>
-        <td><a href="{% url 'edit_category' c.pk %}">Изменить</a>
-            | <a href="{% url 'delete_category' c.pk %}">Удалить</a></td>
+        <td>
+            <div class="row">
+                <div class="col-md-1">
+                    <a href="{% url 'edit_category' c.pk %}">
+                        <img src="{% static 'images/edit.svg' %}"
+                             alt="Изменить" data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             title="Изменить"></a>
+                </div>
+                <div class="col">
+                    <a href="{% url 'delete_category' c.pk %}">
+                        <img src="{% static 'images/delete.svg' %}"
+                             alt="Удалить" data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             title="Удалить"></a>
+                </div>
+            </div>
+        </td>
     </tr>
     {% endfor %}
 
@@ -30,5 +48,5 @@
 
 {% endif %}
 
-<a href="{% url 'add_category' %}" class="btn btn-primary">Добавить</a>
+<a href="{% url 'add_category' %}" class="btn btn-dark">Добавить</a>
 {% endblock %}

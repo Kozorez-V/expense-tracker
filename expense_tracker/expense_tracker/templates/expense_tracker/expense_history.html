@@ -1,6 +1,10 @@
 {% extends 'expense_tracker/base.html' %}
 
+{% load static %}
+
 {% block content %}
+
+<h1 class="display-6">{{ title }}</h1>
 
 {% if page_obj|length == 0 %}
 
@@ -26,21 +30,40 @@
         <td>{{ expense.amount }}</td>
         <td>{{ expense.category }}</td>
         <td>{{ expense.date }}</td>
-        <td><a href="{% url 'edit_expense' expense.pk %}">Изменить</a>
-            | <a href="{% url 'delete_expense' expense.pk %}">Удалить</a></td>
+        <td>
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="{% url 'edit_expense' expense.pk %}">
+                        <img src="{% static 'images/edit.svg' %}"
+                             alt="Изменить" data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             title="Изменить"></a>
+                </div>
+                <div class="col">
+                    <a href="{% url 'delete_expense' expense.pk %}">
+                        <img src="{% static 'images/delete.svg' %}"
+                             alt="Удалить" data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             title="Удалить"></a>
+                </div>
+            </div>
+        </td>
+
     </tr>
     {% endfor %}
     </tbody>
 </table>
 
 <nav>
-    {% for p in page_obj.paginator.page_range %}
-    {% if page_obj.number == p %}
-    <b>{{ p }}</b>
-    {% else %}
-    <a href="?page={{ p }}">{{ p }}</a>
-    {% endif %}
-    {% endfor %}
+    <ul class="pagination justify-content-end">
+        {% for p in page_obj.paginator.page_range %}
+        {% if page_obj.number == p %}
+        <li class="page-item"><a class="page-link link-dark">{{ p }}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+    </ul>
 </nav>
 {% endif %}
 

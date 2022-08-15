@@ -157,6 +157,11 @@ class ExpenseHistory(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Expense.objects.filter(user=self.request.user).select_related('category')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'История расходов'
+        return context
+
 
 @login_required
 def add_category(request):
@@ -274,7 +279,7 @@ def add_expense(request):
 
     context = {
         'form': form,
-        'title': 'Внести расходы',
+        'title': 'Учет расходов',
         'button': 'Добавить'
     }
 
@@ -324,10 +329,20 @@ class SignUpUser(CreateView):
         login(self.request, user)
         return redirect('home')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Регистрация'
+        return context
+
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
     template_name = 'expense_tracker/login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Авторизация'
+        return context
 
 
 def logout_user(request):

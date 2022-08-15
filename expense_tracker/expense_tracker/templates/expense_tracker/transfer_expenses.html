@@ -6,8 +6,8 @@
 <form method="POST" class="post-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{{ button }}</button>
-    | <a href="{% url 'categories' %}">Назад</a>
+    <button type="submit" class="btn btn-dark">{{ button }}</button>
+    <a href="{% url 'categories' %}" class="btn btn-dark">Назад</a>
 </form>
 
 {% endblock %}

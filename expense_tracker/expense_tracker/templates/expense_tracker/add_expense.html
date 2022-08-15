@@ -4,14 +4,14 @@
 
 {% load crispy_forms_tags %}
 
-<h1>{{ title }}</h1>
+<h1 class="display-6">{{ title }}</h1>
 
 <form method="POST" class="post-form">
     {% csrf_token %}
     {{ form.as_p }}
     <div>
-        <button type="submit" class="btn btn-primary">{{ button }}</button>
-        <a href="{% url 'home' %}" class="btn btn-primary">Назад</a>
+        <button type="submit" class="btn btn-dark">{{ button }}</button>
+        <a href="{% url 'home' %}" class="btn btn-dark">Назад</a>
     </div>
 </form>
 

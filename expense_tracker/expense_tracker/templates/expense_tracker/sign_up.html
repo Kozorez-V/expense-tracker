@@ -1,12 +1,12 @@
 {% extends 'expense_tracker/base.html' %}
 
 {% block content %}
-<h1>Регистрация</h1>
+<h1 class="display-6">{{ title }}</h1>
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Регистрация</button>
-    | <a href="{% url 'home' %}">Назад</a>
+    <button type="submit" class="btn btn-dark">Регистрация</button>
+    <a href="{% url 'home' %}" class="btn btn-dark">Назад</a>
 </form>
 {% endblock %}

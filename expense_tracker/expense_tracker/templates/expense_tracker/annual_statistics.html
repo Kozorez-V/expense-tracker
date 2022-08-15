@@ -3,25 +3,27 @@
 {% block content %}
 <h1>{{ title }}</h1>
 
-<table cellpadding="10" rules="cols">
-    <tbody>
+<table class="table table-hover">
 
+    <thead class="table-light">
     <tr>
-        <td>
-            <b>Категория</b>
-        </td>
+        <th scope="col">
+            Категория
+        </th>
 
         {% for month in months %}
-        <td>
-            <b>{{ month }}</b>
-        </td>
+        <th scope="col">
+            {{ month }}
+        </th>
         {% endfor %}
 
-        <td>
-            <b>Всего</b>
-        </td>
+        <th scope="col">
+            Всего
+        </th>
     </tr>
+    </thead>
 
+    <tbody>
     {% for category in categories %}
     <tr>
         <td>
