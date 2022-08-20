@@ -110,30 +110,27 @@ class WeeklyStatistics(LoginRequiredMixin, ListView):
 
 class AnnualStatistics(LoginRequiredMixin, ListView):
     model = Category
-    context_object_name = 'categories'
     template_name = 'expense_tracker/annual_statistics.html'
-
-    def get_queryset(self):
-        return Category.objects.filter(user=self.request.user).only('name')
 
     def get_current_year_expenses(self):
         return Expense.objects.filter(date__year=date.today().isocalendar()[0],
-                                                       user=self.request.user)
+                                      user=self.request.user)
 
-    
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        current_year_expenses = Expense.objects.filter(date__year=date.today().isocalendar()[0],
-                                                       user=self.request.user)
-
-        context['amount_per_category'] = current_year_expenses.values('category') \
+    def get_category_calculation(self):
+        current_year_expenses = self.get_current_year_expenses()
+        amount_per_category = current_year_expenses.values('category') \
             .annotate(total_amount=Sum('amount', default=0.0))
-        context['nonempty_category_pk'] = context['amount_per_category'].values_list('category', flat=True)
+        nonempty_category_pk = amount_per_category.values_list('category', flat=True)
+        total = current_year_expenses.aggregate(Sum('amount', default=0.0))
+        max_amount = current_year_expenses.aggregate(Max('amount', default=0.0))
+        min_amount = current_year_expenses.aggregate(Min('amount', default=0.0))
 
-        context['total'] = current_year_expenses.aggregate(Sum('amount', default=0.0))
-        context['max_amount'] = current_year_expenses.aggregate(Max('amount', default=0.0))
-        context['min_amount'] = current_year_expenses.aggregate(Min('amount', default=0.0))
+        return amount_per_category, nonempty_category_pk, total, max_amount, min_amount
+
+    def get_month_total(self):
+        categories = Category.objects.filter(user=self.request.user)
+
+        current_year_expenses = self.get_current_year_expenses()
 
         expenses_by_month = current_year_expenses.values('category') \
             .annotate(month=ExtractMonth('date')).values('category', 'month').annotate(Sum('amount'))
@@ -145,14 +142,21 @@ class AnnualStatistics(LoginRequiredMixin, ListView):
 
         for number in range(len(months)):
             month_total[months[number]] = {}
-            for category in context['categories']:
+            for category in categories:
                 for exp in expenses_by_month:
                     if exp['category'] == category.pk:
                         if exp['month'] == number + 1:
                             month_total[months[number]][category.name] = exp['amount__sum']
 
-        context['month_total'] = month_total
-        context['months'] = months
+        return categories, months, month_total
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['amount_per_category'], context['nonempty_category_pk'], context['total'], \
+        context['max_amount'], context['min_amount'] = self.get_category_calculation()
+
+        context['categories'], context['months'], context['month_total'] = self.get_month_total()
         context['title'] = 'Статистика'
 
         return context
