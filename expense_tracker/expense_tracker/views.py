@@ -28,18 +28,27 @@ class TodayStatistics(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Category.objects.filter(user=self.request.user).only('name')
 
+    def get_today_expenses(self):
+        return Expense.objects.filter(date=date.today(), user=self.request.user)
+
+    def get_category_calculation(self):
+        today_expenses = self.get_today_expenses()
+
+        amount_per_category = today_expenses.values('category') \
+            .annotate(total_amount=Sum('amount', default=0.0))
+        nonempty_category_pk = amount_per_category.values_list('category', flat=True)
+
+        total = today_expenses.aggregate(Sum('amount', default=0.0))
+        max_amount = today_expenses.aggregate(Max('amount', default=0.0))
+        min_amount = today_expenses.aggregate(Min('amount', default=0.0))
+
+        return amount_per_category, nonempty_category_pk, total, max_amount, min_amount
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        today_expenses = Expense.objects.filter(date=date.today(), user=self.request.user)
 
-        context['amount_per_category'] = today_expenses.values('category') \
-            .annotate(total_amount=Sum('amount', default=0.0))
-
-        context['nonempty_category_pk'] = context['amount_per_category'].values_list('category', flat=True)
-
-        context['total'] = today_expenses.aggregate(Sum('amount', default=0.0))
-        context['max_amount'] = today_expenses.aggregate(Max('amount', default=0.0))
-        context['min_amount'] = today_expenses.aggregate(Min('amount', default=0.0))
+        context['amount_per_category'], context['nonempty_category_pk'], context['total'], \
+        context['max_amount'], context['min_amount'] = self.get_category_calculation()
 
         context['title'] = 'Статистика'
 
@@ -93,7 +102,7 @@ class WeeklyStatistics(LoginRequiredMixin, ListView):
         context['max_amount'], context['min_amount'] = self.get_category_calculation()
 
         context['categories'], context['weekdays'], context['weekday_total'] = self.get_weekday_total()
-    
+
         context['title'] = 'Статистика'
 
         return context
@@ -106,6 +115,12 @@ class AnnualStatistics(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Category.objects.filter(user=self.request.user).only('name')
+
+    def get_current_year_expenses(self):
+        return Expense.objects.filter(date__year=date.today().isocalendar()[0],
+                                                       user=self.request.user)
+
+    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
