@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 from django.db.models import Sum, Max, Min, Count
 from django.db.models.functions import ExtractIsoWeekDay, ExtractMonth
 
@@ -48,25 +48,27 @@ class TodayStatistics(LoginRequiredMixin, ListView):
 
 class WeeklyStatistics(LoginRequiredMixin, ListView):
     model = Category
-    context_object_name = 'categories'
     template_name = 'expense_tracker/week_statistics.html'
 
-    def get_queryset(self):
-        return Category.objects.filter(user=self.request.user).only('name')
+    def get_current_week_expenses(self):
+        return Expense.objects.filter(date__week=date.today().isocalendar()[1],
+                                      user=self.request.user)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        current_week_expenses = Expense.objects.filter(date__week=date.today().isocalendar()[1],
-                                                       user=self.request.user)
-
-        context['amount_per_category'] = current_week_expenses.values('category') \
+    def get_category_calculation(self):
+        current_week_expenses = self.get_current_week_expenses()
+        amount_per_category = current_week_expenses.values('category') \
             .annotate(total_amount=Sum('amount', default=0.0))
-        context['nonempty_category_pk'] = context['amount_per_category'].values_list('category', flat=True)
+        nonempty_category_pk = amount_per_category.values_list('category', flat=True)
+        total = current_week_expenses.aggregate(Sum('amount', default=0.0))
+        max_amount = current_week_expenses.aggregate(Max('amount', default=0.0))
+        min_amount = current_week_expenses.aggregate(Min('amount', default=0.0))
 
-        context['total'] = current_week_expenses.aggregate(Sum('amount', default=0.0))
-        context['max_amount'] = current_week_expenses.aggregate(Max('amount', default=0.0))
-        context['min_amount'] = current_week_expenses.aggregate(Min('amount', default=0.0))
+        return amount_per_category, nonempty_category_pk, total, max_amount, min_amount
 
+    def get_weekday_total(self):
+        categories = Category.objects.filter(user=self.request.user)
+
+        current_week_expenses = self.get_current_week_expenses()
         expenses_by_weekday = current_week_expenses.values('category', 'date') \
             .annotate(weekday=ExtractIsoWeekDay('date')).annotate(Sum('amount'))
 
@@ -76,14 +78,22 @@ class WeeklyStatistics(LoginRequiredMixin, ListView):
 
         for number in range(len(weekdays)):
             weekday_total[weekdays[number]] = {}
-            for category in context['categories']:
+            for category in categories:
                 for exp in expenses_by_weekday:
                     if exp['category'] == category.pk:
                         if exp['weekday'] == number + 1:
                             weekday_total[weekdays[number]][category.name] = exp['amount__sum']
 
-        context['weekdays'] = weekdays
-        context['weekday_total'] = weekday_total
+        return categories, weekdays, weekday_total
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['amount_per_category'], context['nonempty_category_pk'], context['total'], \
+        context['max_amount'], context['min_amount'] = self.get_category_calculation()
+
+        context['categories'], context['weekdays'], context['weekday_total'] = self.get_weekday_total()
+    
         context['title'] = 'Статистика'
 
         return context
@@ -161,6 +171,12 @@ class ExpenseHistory(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'История расходов'
         return context
+
+
+class ShowProfile(LoginRequiredMixin, DetailView):
+    model = Profile
+    context_object_name = 'profile'
+    template_name = 'expense_tracker/profile.html'
 
 
 @login_required
