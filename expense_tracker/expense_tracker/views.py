@@ -46,7 +46,7 @@ class TodayStatistics(LoginRequiredMixin, StatisticsMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        today_expenses = Expense.objects.filter(date=date.today(), user=self.request.user)
+        today_expenses = Expense.objects.today(self.request.user)
 
         context['amount_per_category'], context['nonempty_category_pk'], context['total'], \
         context['max_amount'], context['min_amount'] = self.get_category_calculation(today_expenses)

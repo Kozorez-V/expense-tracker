@@ -32,12 +32,26 @@ class Category(models.Model):
         return self.name
 
 
+class ExpenseQuerySet(models.QuerySet):
+    def today(self, current_user):
+        return self.filter(date=date.today(), user=current_user)
+
+    def current_week(self, current_user):
+        return self.filter(date__week=date.today().isocalendar()[1],
+                           user=current_user)
+
+    def current_year(self, current_user):
+        return self.filter(date__year=date.today().isocalendar()[0],
+                           user=current_user)
+
+
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False, verbose_name='Категория')
     date = models.DateField(blank=False, null=False, verbose_name='Дата')
     name = models.CharField(max_length=50, blank=False, verbose_name='Название')
     amount = models.FloatField(blank=False, null=False, validators=[MinValueValidator(1.0)], verbose_name='Сумма')
+    objects = ExpenseQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Расходы'
