@@ -1,5 +1,3 @@
-from datetime import date
-
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
@@ -7,10 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, ListView, DetailView
-from django.db.models import Sum, Max, Min, Count
-from django.db.models.functions import ExtractIsoWeekDay, ExtractMonth
 
-from .forms import *
+from ..forms import *
 
 
 def index(request):
@@ -18,149 +14,6 @@ def index(request):
         'title': 'Главная страница'
     }
     return render(request, 'expense_tracker/index.html', context)
-
-
-class StatisticsMixin:
-    def get_category_calculation(self, expenses):
-        self.expenses = expenses
-
-        amount_per_category = self.expenses.values('category') \
-            .annotate(total_amount=Sum('amount', default=0.0))
-        nonempty_category_pk = amount_per_category.values_list('category', flat=True)
-
-        total = self.expenses.aggregate(Sum('amount', default=0.0))
-        max_amount = self.expenses.aggregate(Max('amount', default=0.0))
-        min_amount = self.expenses.aggregate(Min('amount', default=0.0))
-
-        return amount_per_category, nonempty_category_pk, total, max_amount, min_amount
-
-
-class TodayStatistics(LoginRequiredMixin, StatisticsMixin, ListView):
-    model = Category
-    context_object_name = 'categories'
-    template_name = 'expense_tracker/today_statistics.html'
-
-    def get_queryset(self):
-        return Category.objects.filter(user=self.request.user).only('name')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        today_expenses = Expense.objects.today(self.request.user)
-
-        context['amount_per_category'], context['nonempty_category_pk'], context['total'], \
-        context['max_amount'], context['min_amount'] = self.get_category_calculation(today_expenses)
-
-        context['title'] = 'Статистика'
-
-        return context
-
-
-class WeeklyStatistics(LoginRequiredMixin, ListView):
-    model = Category
-    template_name = 'expense_tracker/week_statistics.html'
-
-    def get_current_week_expenses(self):
-        return Expense.objects.filter(date__week=date.today().isocalendar()[1],
-                                      user=self.request.user)
-
-    def get_category_calculation(self):
-        current_week_expenses = self.get_current_week_expenses()
-        amount_per_category = current_week_expenses.values('category') \
-            .annotate(total_amount=Sum('amount', default=0.0))
-        nonempty_category_pk = amount_per_category.values_list('category', flat=True)
-        total = current_week_expenses.aggregate(Sum('amount', default=0.0))
-        max_amount = current_week_expenses.aggregate(Max('amount', default=0.0))
-        min_amount = current_week_expenses.aggregate(Min('amount', default=0.0))
-
-        return amount_per_category, nonempty_category_pk, total, max_amount, min_amount
-
-    def get_weekday_total(self):
-        categories = Category.objects.filter(user=self.request.user)
-
-        current_week_expenses = self.get_current_week_expenses()
-        expenses_by_weekday = current_week_expenses.values('category', 'date') \
-            .annotate(weekday=ExtractIsoWeekDay('date')).annotate(Sum('amount'))
-
-        weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-
-        weekday_total = {}
-
-        for number in range(len(weekdays)):
-            weekday_total[weekdays[number]] = {}
-            for category in categories:
-                for exp in expenses_by_weekday:
-                    if exp['category'] == category.pk:
-                        if exp['weekday'] == number + 1:
-                            weekday_total[weekdays[number]][category.name] = exp['amount__sum']
-
-        return categories, weekdays, weekday_total
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['amount_per_category'], context['nonempty_category_pk'], context['total'], \
-        context['max_amount'], context['min_amount'] = self.get_category_calculation()
-
-        context['categories'], context['weekdays'], context['weekday_total'] = self.get_weekday_total()
-
-        context['title'] = 'Статистика'
-
-        return context
-
-
-class AnnualStatistics(LoginRequiredMixin, ListView):
-    model = Category
-    template_name = 'expense_tracker/annual_statistics.html'
-
-    def get_current_year_expenses(self):
-        return Expense.objects.filter(date__year=date.today().isocalendar()[0],
-                                      user=self.request.user)
-
-    def get_category_calculation(self):
-        current_year_expenses = self.get_current_year_expenses()
-        amount_per_category = current_year_expenses.values('category') \
-            .annotate(total_amount=Sum('amount', default=0.0))
-        nonempty_category_pk = amount_per_category.values_list('category', flat=True)
-        total = current_year_expenses.aggregate(Sum('amount', default=0.0))
-        max_amount = current_year_expenses.aggregate(Max('amount', default=0.0))
-        min_amount = current_year_expenses.aggregate(Min('amount', default=0.0))
-
-        return amount_per_category, nonempty_category_pk, total, max_amount, min_amount
-
-    def get_month_total(self):
-        categories = Category.objects.filter(user=self.request.user)
-
-        current_year_expenses = self.get_current_year_expenses()
-
-        expenses_by_month = current_year_expenses.values('category') \
-            .annotate(month=ExtractMonth('date')).values('category', 'month').annotate(Sum('amount'))
-
-        months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-                  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
-
-        month_total = {}
-
-        for number in range(len(months)):
-            month_total[months[number]] = {}
-            for category in categories:
-                for exp in expenses_by_month:
-                    if exp['category'] == category.pk:
-                        if exp['month'] == number + 1:
-                            month_total[months[number]][category.name] = exp['amount__sum']
-
-        return categories, months, month_total
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['amount_per_category'], context['nonempty_category_pk'], context['total'], \
-        context['max_amount'], context['min_amount'] = self.get_category_calculation()
-
-        context['categories'], context['months'], context['month_total'] = self.get_month_total()
-        context['title'] = 'Статистика'
-
-        return context
 
 
 class ShowCategories(LoginRequiredMixin, ListView):

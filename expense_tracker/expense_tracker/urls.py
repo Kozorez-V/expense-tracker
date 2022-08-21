@@ -1,7 +1,7 @@
 from django.urls import path, include
 
-from mysite import settings
 from .views import *
+from mysite import settings
 
 urlpatterns = [
     path('', index, name='home'),
