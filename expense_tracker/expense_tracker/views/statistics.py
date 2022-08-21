@@ -1,8 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 
-from expense_tracker.models import Category, Expense
-from expense_tracker.servers import get_category_calculation, get_weekday_total, get_month_total
+from ..models import Category, Expense
+from ..servers import get_category_calculation, get_weekday_total, get_month_total
 
 
 class TodayStatistics(LoginRequiredMixin, ListView):
