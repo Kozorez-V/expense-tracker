@@ -4,6 +4,8 @@ from django.views.generic import ListView
 from ..models import Category, Expense
 from ..servers import get_category_calculation, get_weekday_total, get_month_total
 
+from datetime import date
+
 
 class TodayStatistics(LoginRequiredMixin, ListView):
     model = Category
@@ -21,6 +23,7 @@ class TodayStatistics(LoginRequiredMixin, ListView):
         context['amount_per_category'], context['nonempty_category_pk'], context['total'], \
         context['max_amount'], context['min_amount'] = get_category_calculation(today_expenses)
 
+        context['date'] = date.today()
         context['title'] = 'Статистика'
 
         return context
