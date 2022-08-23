@@ -1,8 +1,8 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from .models import *
+from django.contrib.auth.models import User
 
 
 class SignUpForm(UserCreationForm):
@@ -19,6 +19,26 @@ class SignUpForm(UserCreationForm):
             'password1',
             'password2',
         ]
+
+
+class UpdateUserForm(forms.ModelForm):
+    username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-input'}))
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'email'
+        ]
+
+
+class UpdateProfileForm(forms.ModelForm):
+    limit = forms.IntegerField(label='Сумма лимита', widget=forms.NumberInput(attrs={'min': 0}))
+
+    class Meta:
+        model = Profile
+        fields = ['limit']
 
 
 class LoginUserForm(AuthenticationForm):

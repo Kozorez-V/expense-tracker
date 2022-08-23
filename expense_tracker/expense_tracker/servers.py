@@ -1,8 +1,10 @@
 from django.db.models import Sum, Max, Min, Count
 from django.db.models.functions import ExtractIsoWeekDay, ExtractMonth
 
-from expense_tracker.models import Category, Expense
+from expense_tracker.models import Category, Expense, Profile
 
+
+# statistics
 
 def get_category_calculation(expenses):
     amount_per_category = expenses.values('category') \
@@ -60,3 +62,14 @@ def get_month_total(current_user):
                         month_total[months[number]][category.name] = exp['amount__sum']
 
     return categories, months, month_total
+
+
+# check limit
+
+def check_limit(limit):
+    return limit > 0
+
+
+def excess_limit(limit, amount):
+    if amount > limit:
+        return amount - limit

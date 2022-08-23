@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView
+from django.contrib import messages
 
 from ..forms import *
 
@@ -56,6 +57,7 @@ def add_expense(request):
                 expense = form.save(commit=False)
                 expense.user = request.user
                 expense.save()
+                messages.success(request, 'Список расходов пополнен')
                 return redirect('add_expense')
             except:
                 form.add_error(None, 'Ошибка внесения расходов')

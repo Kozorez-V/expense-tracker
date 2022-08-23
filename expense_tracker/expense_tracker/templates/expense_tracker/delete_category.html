@@ -7,19 +7,21 @@
     {% if messages %}
     <p class="messages">{% for message in messages %}</p>
     <p class="{{ message.tags }}">
-    <h3>{{ message|safe }}</h3>
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Внимание!</h4>
+        <p>{{ message|safe }}</p>
+        <hr>
+        <p class="mb-0">Вы уверены, что хотите удалить категорию {{ category }}?</p>
+    </div>
     {% endfor %}
     {% endif %}
 
-    {% if expenses %}
-    <p><a href="{% url 'transfer_expenses' category_pk %}" class="btn btn-success">Перенести расходы</a></p>
-    {% endif %}
-
-    <h3>Вы уверены, что хотите удалить категорию {{ category }}?</h3>
-
     <p>
-        <button type="submit" class="btn btn-danger">Да</button>
-        <a href="{% url 'categories' %}" class="btn btn-dark">Нет</a>
+        {% if expenses %}
+        <a href="{% url 'transfer_expenses' category_pk %}" class="btn btn-success">Перенести расходы</a>
+        {% endif %}
+        <button type="submit" class="btn btn-danger">Удалить категорию</button>
+        <a href="{% url 'categories' %}" class="btn btn-dark">Отмена</a>
     </p>
 </form>
 {% endblock %}

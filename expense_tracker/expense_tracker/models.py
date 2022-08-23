@@ -11,12 +11,14 @@ class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 primary_key=True, verbose_name='Пользователь')
-    limit_flag = models.BooleanField(blank=False, default=False)
     limit = models.PositiveIntegerField(blank=True, null=True, verbose_name='Лимит')
 
     class Meta:
         verbose_name = 'Профили'
         verbose_name_plural = 'Профили'
+
+    def limit_flag(self):
+        return self.objects.limit > 0
 
 
 class Category(models.Model):

@@ -1,5 +1,43 @@
-{% extendes 'expense_tracker/base.html' %}
+{% extends 'expense_tracker/base.html' %}
 
 {% block content %}
+
+<h1>{{ title }}</h1>
+
+{% if messages %}
+<p class="messages">{% for message in messages %}</p>
+<p class="{{ message.tags }}">
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ message|safe }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="form-content">
+    <form method="post" class="post-form">
+        {% csrf_token %}
+        <div class="form-row mb-3">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label class="small mb-1">Имя:</label>
+                    {{ user_form.username }}
+                    <label class="small mb-1">Email:</label>
+                    {{ user_form.email }}
+                </div>
+                <a href="#">Изменить пароль</a>
+                <hr>
+                <div class="form-group">
+                    <label class="small mb-1">Лимит расходов:</label>
+                    {{ profile_form.limit }}
+                </div>
+
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-dark">Сохранить</button>
+        <button type="reset" class="btn btn-dark">Отмена</button>
+    </form>
+</div>
 
 {% endblock %}

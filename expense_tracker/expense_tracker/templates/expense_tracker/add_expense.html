@@ -8,6 +8,18 @@
 
 <form method="POST" class="post-form">
     {% csrf_token %}
+    
+    {% if messages %}
+    <p class="messages">{% for message in messages %}</p>
+    <p class="{{ message.tags }}">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Внимание!</h4>
+        <p>{{ message|safe }}</p>
+        <hr>
+        <p class="mb-0">Вы уверены, что хотите удалить категорию {{ category }}?</p>
+    </div>
+    {% endfor %}
+    {% endif %}
 
     <div class="row mb-3">
         {{ form.name|as_crispy_field }}
