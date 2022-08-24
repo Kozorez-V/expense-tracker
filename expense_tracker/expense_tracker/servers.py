@@ -22,6 +22,7 @@ def get_weekday_total(current_user):
     categories = Category.objects.filter(user=current_user)
 
     current_week_expenses = Expense.objects.current_week(current_user)
+
     expenses_by_weekday = current_week_expenses.values('category', 'date') \
         .annotate(weekday=ExtractIsoWeekDay('date')).annotate(Sum('amount'))
 
@@ -64,12 +65,14 @@ def get_month_total(current_user):
     return categories, months, month_total
 
 
-# check limit
+# limit
 
 def check_limit(limit):
     return limit > 0
 
 
-def excess_limit(limit, amount):
-    if amount > limit:
-        return amount - limit
+def get_excess_limit(limit, total):
+    if total <= limit:
+        return 0
+
+    return total - limit

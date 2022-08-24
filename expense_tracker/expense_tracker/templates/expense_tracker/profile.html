@@ -17,27 +17,31 @@
 <div class="form-content">
     <form method="post" class="post-form">
         {% csrf_token %}
-        <div class="form-row mb-3">
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label class="small mb-1">Имя:</label>
-                    {{ user_form.username }}
-                    <label class="small mb-1">Email:</label>
-                    {{ user_form.email }}
-                </div>
-                <a href="#">Изменить пароль</a>
-                <hr>
-                <div class="form-group">
-                    <label class="small mb-1">Лимит расходов:</label>
-                    {{ profile_form.limit }}
-                </div>
 
+        <div class="col-md-5">
+            <div class="form-group">
+                <label class="small mb-1">Имя:</label>
+                {{ user_form.username }}
+                <label class="small mb-1">Email:</label>
+                {{ user_form.email }}
+            </div>
+            <a href="#">Изменить пароль</a>
+            <hr>
+
+            <div class="form-group mb-3">
+                <label class="small mb-1">Ежедневный лимит:</label>
+                {{ profile_form.day_limit }}
+            </div>
+            <div class="form-group mb-3">
+                <label class="small mr-10">Недельный лимит:</label>
+                {{ profile_form.week_limit }}
             </div>
         </div>
+</div>
 
-        <button type="submit" class="btn btn-dark">Сохранить</button>
-        <button type="reset" class="btn btn-dark">Отмена</button>
-    </form>
+<button type="submit" class="btn btn-dark">Сохранить</button>
+<button type="reset" class="btn btn-dark">Отмена</button>
+</form>
 </div>
 
 {% endblock %}

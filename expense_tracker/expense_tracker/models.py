@@ -11,14 +11,12 @@ class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 primary_key=True, verbose_name='Пользователь')
-    limit = models.PositiveIntegerField(blank=True, null=True, verbose_name='Лимит')
+    day_limit = models.PositiveIntegerField(blank=False, null=False, default=0, verbose_name='Ежедневный лимит')
+    week_limit = models.PositiveIntegerField(blank=False, null=False, default=0, verbose_name='Еженедельный лимит')
 
     class Meta:
         verbose_name = 'Профили'
         verbose_name_plural = 'Профили'
-
-    def limit_flag(self):
-        return self.objects.limit > 0
 
 
 class Category(models.Model):

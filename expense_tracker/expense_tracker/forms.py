@@ -34,11 +34,15 @@ class UpdateUserForm(forms.ModelForm):
 
 
 class UpdateProfileForm(forms.ModelForm):
-    limit = forms.IntegerField(label='Сумма лимита', widget=forms.NumberInput(attrs={'min': 0}))
+    day_limit = forms.IntegerField(label='Ежедневный лимит', widget=forms.NumberInput(attrs={'min': 0}))
+    week_limit = forms.IntegerField(label='Еженедельный лимит', widget=forms.NumberInput(attrs={'min': 0}))
 
     class Meta:
         model = Profile
-        fields = ['limit']
+        fields = [
+            'day_limit',
+            'week_limit'
+        ]
 
 
 class LoginUserForm(AuthenticationForm):

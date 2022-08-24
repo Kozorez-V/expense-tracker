@@ -3,7 +3,7 @@ from .models import Profile, Expense, Category
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user', 'limit')
+    list_display = ('pk', 'user', 'day_limit', 'week_limit')
     list_display_links = ['user']
     search_fields = ['user']
 
