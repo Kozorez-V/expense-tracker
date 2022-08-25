@@ -1,1 +1,1 @@
-# expense-tracker
+# Трекер расходов
