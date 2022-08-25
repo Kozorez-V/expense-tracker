@@ -42,7 +42,7 @@
     </tbody>
 </table>
 
-{% if excess_limit is not None %}
+{% if excess_limit %}
 <p><b>Ваш дневной лимит превышен на</b> {{ excess_limit }} </p>
 {% endif %}
 <p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>

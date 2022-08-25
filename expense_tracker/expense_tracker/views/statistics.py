@@ -6,12 +6,32 @@ from ..servers import get_amount_per_category, \
     get_nonempty_category_pk, \
     get_min_amount, get_max_amount, \
     get_total_amount, get_weekday_total, \
-    get_month_total, check_limit, get_excess_limit
+    get_month_total, get_excess_limit
 
 from datetime import date
 
 
-class TodayStatistics(LoginRequiredMixin, ListView):
+class StatisticsContextMixin:
+    def get_user_context(self, expenses, limit_time=None, **kwargs):
+        context = kwargs
+
+        context['amount_per_category'] = get_amount_per_category(expenses)
+        context['nonempty_category_pk'] = get_nonempty_category_pk(expenses)
+        context['total_amount'] = get_total_amount(expenses)
+        context['max_amount'] = get_max_amount(expenses)
+        context['min_amount'] = get_min_amount(expenses)
+
+        if limit_time is not None:
+            limit = Profile.objects.get_limit_value(self.request.user, limit_time)
+
+            context['excess_limit'] = get_excess_limit(limit, context['total_amount']['amount__sum'])
+
+        context['title'] = 'Статистика'
+
+        return context
+
+
+class TodayStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
     model = Category
     context_object_name = 'categories'
     template_name = 'expense_tracker/today_statistics.html'
@@ -21,68 +41,34 @@ class TodayStatistics(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        today_expenses = Expense.objects.today(self.request.user)
-
-        limit = Profile.objects.get_limit_value(self.request.user, 'day_limit')
-
-        context['amount_per_category'] = get_amount_per_category(today_expenses)
-        context['nonempty_category_pk'] = get_nonempty_category_pk(today_expenses)
-        context['total_amount'] = get_total_amount(today_expenses)
-        context['max_amount'] = get_max_amount(today_expenses)
-        context['min_amount'] = get_min_amount(today_expenses)
-
-        if get_excess_limit(limit, context['total_amount']['amount__sum']):
-            context['excess_limit'] = get_excess_limit(limit, context['total_amount']['amount__sum'])
-
         context['date'] = date.today()
-        context['title'] = 'Статистика'
+        today_expenses = Expense.objects.today(self.request.user)
+        c_def = self.get_user_context(expenses=today_expenses, limit_time='day_limit')
 
-        return context
+        return dict(list(context.items()) + list(c_def.items()))
 
 
-class WeeklyStatistics(LoginRequiredMixin, ListView):
+class WeeklyStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
     model = Category
     template_name = 'expense_tracker/week_statistics.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        current_week_expenses = Expense.objects.current_week(self.request.user)
-
-        limit = Profile.objects.get_limit_value(self.request.user, 'week_limit')
-
-        context['amount_per_category'] = get_amount_per_category(current_week_expenses)
-        context['nonempty_category_pk'] = get_nonempty_category_pk(current_week_expenses)
-        context['total_amount'] = get_total_amount(current_week_expenses)
-        context['max_amount'] = get_max_amount(current_week_expenses)
-        context['min_amount'] = get_min_amount(current_week_expenses)
-
-        context['excess_limit'] = get_excess_limit(limit, context['total_amount']['amount__sum'])
-
         context['categories'], context['weekdays'], context['weekday_total'] = get_weekday_total(self.request.user)
+        current_week_expenses = Expense.objects.current_week(self.request.user)
+        c_def = self.get_user_context(expenses=current_week_expenses, limit_time='week_limit')
 
-        context['title'] = 'Статистика'
-
-        return context
+        return dict(list(context.items()) + list(c_def.items()))
 
 
-class AnnualStatistics(LoginRequiredMixin, ListView):
+class AnnualStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
     model = Category
     template_name = 'expense_tracker/annual_statistics.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        current_year_expenses = Expense.objects.current_year(self.request.user)
-
-        context['amount_per_category'] = get_amount_per_category(current_year_expenses)
-        context['nonempty_category_pk'] = get_nonempty_category_pk(current_year_expenses)
-        context['total_amount'] = get_total_amount(current_year_expenses)
-        context['max_amount'] = get_max_amount(current_year_expenses)
-        context['min_amount'] = get_min_amount(current_year_expenses)
-
         context['categories'], context['months'], context['month_total'] = get_month_total(self.request.user)
-        context['title'] = 'Статистика'
+        current_year_expenses = Expense.objects.current_year(self.request.user)
+        c_def = self.get_user_context(expenses=current_year_expenses)
 
-        return context
+        return dict(list(context.items()) + list(c_def.items()))
