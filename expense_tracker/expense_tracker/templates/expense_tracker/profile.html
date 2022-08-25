@@ -28,13 +28,19 @@
             <a href="#">Изменить пароль</a>
             <hr>
 
+            <h6>Лимит</h6>
+
             <div class="form-group mb-3">
-                <label class="small mb-1">Ежедневный лимит:</label>
+                <label class="small mb-1">День:</label>
                 {{ profile_form.day_limit }}
             </div>
             <div class="form-group mb-3">
-                <label class="small mr-10">Недельный лимит:</label>
+                <label class="small mr-10">Неделя:</label>
                 {{ profile_form.week_limit }}
+            </div>
+            <div class="form-group mb-3">
+                <label class="small mr-10">Месяц:</label>
+                {{ profile_form.month_limit }}
             </div>
         </div>
 </div>

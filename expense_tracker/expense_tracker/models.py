@@ -18,6 +18,7 @@ class Profile(models.Model):
                                 primary_key=True, verbose_name='Пользователь')
     day_limit = models.PositiveIntegerField(blank=False, null=False, default=0, verbose_name='Ежедневный лимит')
     week_limit = models.PositiveIntegerField(blank=False, null=False, default=0, verbose_name='Еженедельный лимит')
+    month_limit = models.PositiveIntegerField(blank=True, null=False, default=0, verbose_name='Ежемесячный лимит')
     objects = ProfileQuerySet.as_manager()
 
     class Meta:

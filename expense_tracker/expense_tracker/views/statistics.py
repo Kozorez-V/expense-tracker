@@ -48,6 +48,10 @@ class TodayStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
+class MonthStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
+    pass
+
+
 class WeeklyStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
     model = Category
     template_name = 'expense_tracker/week_statistics.html'
