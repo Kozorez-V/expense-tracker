@@ -6,18 +6,39 @@ from expense_tracker.models import Category, Expense, Profile
 
 # statistics
 
-def get_category_calculation(expenses):
+# category calculation
+def get_amount_per_category(expenses):
     amount_per_category = expenses.values('category') \
         .annotate(total_amount=Sum('amount', default=0.0))
+
+    return amount_per_category
+
+
+def get_nonempty_category_pk(amount_per_category):
     nonempty_category_pk = amount_per_category.values_list('category', flat=True)
 
-    total = expenses.aggregate(Sum('amount', default=0.0))
+    return nonempty_category_pk
+
+
+def get_total_amount(expenses):
+    total_amount = expenses.aggregate(Sum('amount', default=0.0))
+
+    return total_amount
+
+
+def get_max_amount(expenses):
     max_amount = expenses.aggregate(Max('amount', default=0.0))
+
+    return max_amount
+
+
+def get_min_amount(expenses):
     min_amount = expenses.aggregate(Min('amount', default=0.0))
 
-    return amount_per_category, nonempty_category_pk, total, max_amount, min_amount
+    return min_amount
 
 
+# weekly
 def get_weekday_total(current_user):
     categories = Category.objects.filter(user=current_user)
 
@@ -41,6 +62,7 @@ def get_weekday_total(current_user):
     return categories, weekdays, weekday_total
 
 
+# monthly
 def get_month_total(current_user):
     categories = Category.objects.filter(user=current_user)
 
@@ -66,13 +88,13 @@ def get_month_total(current_user):
 
 
 # limit
-
 def check_limit(limit):
     return limit > 0
 
 
-def get_excess_limit(limit, total):
-    if total <= limit:
-        return 0
+def get_excess_limit(limit, total_amount):
+    if check_limit(limit):
+        if total_amount <= limit:
+            return 0
 
-    return total - limit
+        return total_amount - limit

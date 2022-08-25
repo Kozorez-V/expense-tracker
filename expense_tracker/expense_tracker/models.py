@@ -7,12 +7,18 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+class ProfileQuerySet(models.QuerySet):
+    def get_limit_value(self, current_user, limit_time):
+        return self.filter(user=current_user).values(limit_time)[0][limit_time]
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 primary_key=True, verbose_name='Пользователь')
     day_limit = models.PositiveIntegerField(blank=False, null=False, default=0, verbose_name='Ежедневный лимит')
     week_limit = models.PositiveIntegerField(blank=False, null=False, default=0, verbose_name='Еженедельный лимит')
+    objects = ProfileQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Профили'

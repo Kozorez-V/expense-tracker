@@ -83,7 +83,7 @@ def edit_expense(request, pk):
                 expense = form.save(commit=False)
                 expense.user = request.user
                 expense.save()
-                return redirect('add_expense')
+                return redirect('expense_history')
             except:
                 form.add_error(None, 'Ошибка редактирования расходов')
     else:
