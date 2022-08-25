@@ -32,8 +32,8 @@ class TodayStatistics(LoginRequiredMixin, ListView):
         context['max_amount'] = get_max_amount(today_expenses)
         context['min_amount'] = get_min_amount(today_expenses)
 
-        if get_excess_limit(limit, get_total_amount(today_expenses)['amount__sum']):
-            context['excess_limit'] = get_excess_limit(limit, get_total_amount(today_expenses)['amount__sum'])
+        if get_excess_limit(limit, context['total_amount']['amount__sum']):
+            context['excess_limit'] = get_excess_limit(limit, context['total_amount']['amount__sum'])
 
         context['date'] = date.today()
         context['title'] = 'Статистика'
@@ -50,11 +50,15 @@ class WeeklyStatistics(LoginRequiredMixin, ListView):
 
         current_week_expenses = Expense.objects.current_week(self.request.user)
 
+        limit = Profile.objects.get_limit_value(self.request.user, 'week_limit')
+
         context['amount_per_category'] = get_amount_per_category(current_week_expenses)
         context['nonempty_category_pk'] = get_nonempty_category_pk(current_week_expenses)
         context['total_amount'] = get_total_amount(current_week_expenses)
         context['max_amount'] = get_max_amount(current_week_expenses)
         context['min_amount'] = get_min_amount(current_week_expenses)
+
+        context['excess_limit'] = get_excess_limit(limit, context['total_amount']['amount__sum'])
 
         context['categories'], context['weekdays'], context['weekday_total'] = get_weekday_total(self.request.user)
 
