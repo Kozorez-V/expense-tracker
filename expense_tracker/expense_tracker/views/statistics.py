@@ -12,7 +12,7 @@ from datetime import date
 
 
 class StatisticsContextMixin:
-    def get_user_context(self, expenses, limit_time=None, **kwargs):
+    def get_user_context(self, expenses, title, limit_time=None, **kwargs):
         context = kwargs
 
         context['amount_per_category'] = get_amount_per_category(expenses)
@@ -26,7 +26,8 @@ class StatisticsContextMixin:
 
             context['excess_limit'] = get_excess_limit(limit, context['total_amount']['amount__sum'])
 
-        context['title'] = 'Статистика'
+        context['date'] = date.today()
+        context['title'] = title
 
         return context
 
@@ -41,9 +42,8 @@ class TodayStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['date'] = date.today()
         today_expenses = Expense.objects.today(self.request.user)
-        c_def = self.get_user_context(expenses=today_expenses, limit_time='day_limit')
+        c_def = self.get_user_context(expenses=today_expenses, title='Сегодня', limit_time='day_limit')
 
         return dict(list(context.items()) + list(c_def.items()))
 
@@ -59,7 +59,7 @@ class MonthStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         month_expenses = Expense.objects.current_month(self.request.user)
-        c_def = self.get_user_context(expenses=month_expenses, limit_time='month_limit')
+        c_def = self.get_user_context(expenses=month_expenses, title='Месяц', limit_time='month_limit')
 
         return dict(list(context.items()) + list(c_def.items()))
 
@@ -72,7 +72,7 @@ class WeeklyStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['categories'], context['weekdays'], context['weekday_total'] = get_weekday_total(self.request.user)
         current_week_expenses = Expense.objects.current_week(self.request.user)
-        c_def = self.get_user_context(expenses=current_week_expenses, limit_time='week_limit')
+        c_def = self.get_user_context(expenses=current_week_expenses, title='Неделя', limit_time='week_limit')
 
         return dict(list(context.items()) + list(c_def.items()))
 
@@ -85,6 +85,6 @@ class AnnualStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['categories'], context['months'], context['month_total'] = get_month_total(self.request.user)
         current_year_expenses = Expense.objects.current_year(self.request.user)
-        c_def = self.get_user_context(expenses=current_year_expenses)
+        c_def = self.get_user_context(expenses=current_year_expenses, title='Год')
 
         return dict(list(context.items()) + list(c_def.items()))

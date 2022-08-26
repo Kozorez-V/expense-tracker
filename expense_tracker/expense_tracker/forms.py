@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 
 from .models import *
 from django.contrib.auth.models import User
@@ -50,6 +50,19 @@ class UpdateProfileForm(forms.ModelForm):
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+
+
+class PasswordChangingForm(PasswordChangeForm):
+    old_password = forms.CharField(label='Старый пароль', widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                                            'type': 'password'}))
+    new_password1 = forms.CharField(label='Новый пароль', widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                                            'type': 'password'}))
+    new_password2 = forms.CharField(label='Введите пароль повторно',
+                                    widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
+
+    class Meta:
+        model = User
+        fields = ['old_password', 'new_password1', 'new_password2']
 
 
 class AddExpenseForm(forms.ModelForm):
