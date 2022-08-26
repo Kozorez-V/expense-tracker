@@ -49,7 +49,19 @@ class TodayStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
 
 
 class MonthStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
-    pass
+    model = Category
+    context_object_name = 'categories'
+    template_name = 'expense_tracker/month_statistics.html'
+
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user).only('name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        month_expenses = Expense.objects.current_month(self.request.user)
+        c_def = self.get_user_context(expenses=month_expenses, limit_time='month_limit')
+
+        return dict(list(context.items()) + list(c_def.items()))
 
 
 class WeeklyStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):

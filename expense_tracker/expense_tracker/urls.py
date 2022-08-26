@@ -20,6 +20,7 @@ urlpatterns = [
     path('delete_expense/<int:pk>', delete_expense, name='delete_expense'),
     path('statistics/today/', TodayStatistics.as_view(), name='today_statistics'),
     path('statistics/week/', WeeklyStatistics.as_view(), name='week_statistics'),
+    path('statistics/month/', MonthStatistics.as_view(), name='month_statistics'),
     path('statistics/annual/', AnnualStatistics.as_view(), name='annual_statistics'),
     path('__debug__/', include('debug_toolbar.urls'))
 ]

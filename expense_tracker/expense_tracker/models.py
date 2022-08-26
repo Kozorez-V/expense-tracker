@@ -46,6 +46,9 @@ class ExpenseQuerySet(models.QuerySet):
         return self.filter(date__week=date.today().isocalendar()[1],
                            user=current_user)
 
+    def current_month(self, current_user):
+        return self.filter(date__month=date.today().month, user=current_user)
+
     def current_year(self, current_user):
         return self.filter(date__year=date.today().isocalendar()[0],
                            user=current_user)

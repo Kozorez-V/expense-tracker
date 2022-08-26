@@ -1,0 +1,50 @@
+{% extends 'expense_tracker/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<table class="table table-hover">
+    <thead class="table-light">
+    <tr>
+        <th scope="col">Категория</th>
+        <th scope="col">Всего</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for category in categories %}
+    <tr>
+        <td>{{ category }}</td>
+
+        {% if category.pk in nonempty_category_pk %}
+
+        {% for amount in amount_per_category %}
+
+        {% if amount.category == category.pk %}
+        <td>
+            {{ amount.total_amount }}
+        </td>
+        {% endif %}
+
+        {% endfor %}
+
+        {% else %}
+        <td>0,0</td>
+
+        {% endif %}
+
+    </tr>
+    {% endfor %}
+
+
+    </tbody>
+</table>
+
+{% if excess_limit %}
+<p><b>Ваш месячный лимит превышен на</b> {{ excess_limit }} </p>
+{% endif %}
+<p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
+<p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
+<p><b>Итого:</b> {{ total_amount.amount__sum }}</p>
+
+{% endblock %}
