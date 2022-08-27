@@ -8,34 +8,24 @@ from expense_tracker.models import Category, Expense, Profile
 
 # category calculation
 def get_amount_per_category(expenses):
-    amount_per_category = expenses.values('category') \
+    return expenses.values('category') \
         .annotate(total_amount=Sum('amount', default=0.0))
-
-    return amount_per_category
 
 
 def get_nonempty_category_pk(amount_per_category):
-    nonempty_category_pk = amount_per_category.values_list('category', flat=True)
-
-    return nonempty_category_pk
+    return amount_per_category.values_list('category', flat=True)
 
 
 def get_total_amount(expenses):
-    total_amount = expenses.aggregate(Sum('amount', default=0.0))
-
-    return total_amount
+    return expenses.aggregate(Sum('amount', default=0.0))
 
 
 def get_max_amount(expenses):
-    max_amount = expenses.aggregate(Max('amount', default=0.0))
-
-    return max_amount
+    return expenses.aggregate(Max('amount', default=0.0))
 
 
 def get_min_amount(expenses):
-    min_amount = expenses.aggregate(Min('amount', default=0.0))
-
-    return min_amount
+    return expenses.aggregate(Min('amount', default=0.0))
 
 
 # weekly

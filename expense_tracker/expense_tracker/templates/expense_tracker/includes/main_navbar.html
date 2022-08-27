@@ -2,12 +2,13 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">Трекер расходов</a>
         <ul class="nav">
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated and not request.user.is_superuser %}
             <li class="nav-item">
                 <a class="nav-link link-light" aria-current="page" href="{% url 'profile' %}">Профиль</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link link-light dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                <a class="nav-link link-light dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                   data-bs-toggle="dropdown"
                    aria-expanded="false">
                     Учет расходов
                 </a>
@@ -17,7 +18,8 @@
                 </ul>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link link-light dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                <a class="nav-link link-light dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                   data-bs-toggle="dropdown"
                    aria-expanded="false">
                     Статистика
                 </a>
@@ -34,6 +36,15 @@
             <li class="nav-item">
                 <a class="nav-link link-light" href="{% url 'logout' %}">Выйти</a>
             </li>
+
+            {% elif request.user.is_superuser %}
+            <li class="nav-item">
+                <a class="nav-link link-light" href="admin/">Административная панель</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'logout' %}">Выйти</a>
+            </li>
+
             {% else %}
             <li class="nav-item">
                 <a class="nav-link link-light" href="{% url 'sign_up' %}">Регистрация</a>
