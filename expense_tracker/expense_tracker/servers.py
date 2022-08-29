@@ -1,12 +1,11 @@
-from django.db.models import Sum, Max, Min, Count
+from django.db.models import Sum, Max, Min
 from django.db.models.functions import ExtractIsoWeekDay, ExtractMonth
 
-from expense_tracker.models import Category, Expense, Profile
+from expense_tracker.models import Category, Expense
 
 
 # statistics
 
-# category calculation
 def get_amount_per_category(expenses):
     return expenses.values('category') \
         .annotate(total_amount=Sum('amount', default=0.0))
@@ -30,16 +29,13 @@ def get_min_amount(expenses):
 
 # weekly
 def get_weekday_total(current_user):
-    categories = Category.objects.filter(user=current_user)
+    weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+    weekday_total = {}
+    categories = Category.objects.get_user_categories(current_user)
 
     current_week_expenses = Expense.objects.current_week(current_user)
-
     expenses_by_weekday = current_week_expenses.values('category', 'date') \
         .annotate(weekday=ExtractIsoWeekDay('date')).annotate(Sum('amount'))
-
-    weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-
-    weekday_total = {}
 
     for number in range(len(weekdays)):
         weekday_total[weekdays[number]] = {}
@@ -54,17 +50,14 @@ def get_weekday_total(current_user):
 
 # monthly
 def get_month_total(current_user):
-    categories = Category.objects.filter(user=current_user)
-
-    current_year_expenses = Expense.objects.current_year(current_user)
-
-    expenses_by_month = current_year_expenses.values('category') \
-        .annotate(month=ExtractMonth('date')).values('category', 'month').annotate(Sum('amount'))
-
     months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
               'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
-
     month_total = {}
+    categories = Category.objects.get_user_categories(current_user)
+
+    current_year_expenses = Expense.objects.current_year(current_user)
+    expenses_by_month = current_year_expenses.values('category') \
+        .annotate(month=ExtractMonth('date')).values('category', 'month').annotate(Sum('amount'))
 
     for number in range(len(months)):
         month_total[months[number]] = {}

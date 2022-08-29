@@ -26,9 +26,15 @@ class Profile(models.Model):
         verbose_name_plural = 'Профили'
 
 
+class CategoryQuerySet(models.QuerySet):
+    def get_user_categories(self, current_user):
+        return self.filter(user=current_user)
+
+
 class Category(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Пользователь')
     name = models.CharField(max_length=30, blank=False, verbose_name='Название')
+    objects = CategoryQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Категории'
