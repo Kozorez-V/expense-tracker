@@ -1,7 +1,8 @@
 {% extends 'expense_tracker/base.html' %}
 
-{% block content %}
+{% load cache %}
 
+{% block content %}
 <h1>{{ title }}</h1>
 
 {% if messages %}
@@ -43,7 +44,6 @@
                 {{ profile_form.month_limit }}
             </div>
         </div>
-</div>
 
 <button type="submit" class="btn btn-dark">Сохранить</button>
 <button type="reset" class="btn btn-dark">Отмена</button>
