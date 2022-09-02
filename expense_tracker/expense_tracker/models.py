@@ -3,8 +3,10 @@ from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
-from django.db.models.signals import post_save
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
+
+from django.core.cache import cache
 
 
 class ProfileQuerySet(models.QuerySet):
@@ -97,3 +99,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     if not instance.is_superuser:
         instance.profile.save()
+
+
+@receiver(post_delete, sender=Category)
+def category_post_delete_handler(sender, **kwargs):
+    cache.delete('category')
+
+
+@receiver(post_save, sender=Category)
+def category_post_save_handler(sender, **kwargs):
+    cache.delete('category')

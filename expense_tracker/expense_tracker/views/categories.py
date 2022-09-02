@@ -14,7 +14,11 @@ class ShowCategories(LoginRequiredMixin, ListView):
     template_name = 'expense_tracker/category_list.html'
 
     def get_queryset(self):
-        return Category.objects.filter(user=self.request.user)
+        category = cache.get('category')
+        if category is None:
+            category = Category.objects.filter(user=self.request.user)
+            cache.set('category', category)
+        return category
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -32,7 +36,7 @@ def add_category(request):
                 category.user = request.user
                 category.save()
                 return redirect('categories')
-            except:
+            except: #bare_except
                 form.add_error(None, 'Ошибка добавления категории')
     else:
         form = AddCategoryForm()
@@ -57,7 +61,7 @@ def edit_category(request, pk):
                 category.user = request.user
                 category.save()
                 return redirect('categories')
-            except:
+            except: #bare except
                 form.add_error(None, 'Ошибка редактирования категории')
     else:
         form = AddCategoryForm(instance=category)
