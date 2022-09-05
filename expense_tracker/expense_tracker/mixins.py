@@ -1,7 +1,5 @@
 from datetime import date
 
-from django.core.cache import cache
-
 from .models import Profile
 from .servers import get_amount_per_category, \
     get_nonempty_category_pk, \

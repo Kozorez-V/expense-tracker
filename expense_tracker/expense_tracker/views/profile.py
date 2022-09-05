@@ -4,7 +4,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
-from expense_tracker.forms import UpdateUserForm, UpdateProfileForm, PasswordChangingForm
+from ..forms import UpdateUserForm, UpdateProfileForm, PasswordChangingForm
 
 
 @login_required
