@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'expense_tracker.apps.ExpenseTrackerConfig',
+    'api.apps.ApiConfig',
     'debug_toolbar',
     'bootstrap5',
     'crispy_forms',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

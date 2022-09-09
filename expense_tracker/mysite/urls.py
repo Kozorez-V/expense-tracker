@@ -20,5 +20,6 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('expense_tracker/', include('expense_tracker.urls')),
+    path('expense-tracker-api/', include('api.urls')),
     path('', RedirectView.as_view(url='/expense_tracker/', permanent=True)),
 ]

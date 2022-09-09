@@ -14,11 +14,7 @@ class ShowCategories(LoginRequiredMixin, ListView):
     template_name = 'expense_tracker/category_list.html'
 
     def get_queryset(self):
-        category = cache.get('category')
-        if category is None:
-            category = Category.objects.filter(user=self.request.user)
-            cache.set('category', category)
-        return category
+        return Category.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
