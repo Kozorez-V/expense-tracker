@@ -6,4 +6,4 @@ from expense_tracker.models import Category
 class CategoriesSerializers(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['pk', 'user', 'name']
