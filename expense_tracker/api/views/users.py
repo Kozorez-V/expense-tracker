@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from ..serializers import UserSerializers
-from expense_tracker.models import Category
+from expense_tracker.models import Category, Expense
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -17,7 +17,19 @@ class UserViewSet(viewsets.ModelViewSet):
             return User.objects.all()
         return User.objects.filter(username=self.request.user)
 
-    @action(methods=['get'], detail=True)
+    @action(methods=['get'], detail=True, permission_classes=[IsAdminUser])
     def categories(self, request, pk=None):
         categories = Category.objects.filter(user__pk=pk)
         return Response({'categories': [category.name for category in categories]})
+
+    @action(methods=['get'], detail=True, permission_classes=[IsAdminUser])
+    def expenses(self, request, pk=None):
+        expenses = Expense.objects.filter(user__pk=pk)
+        return Response({'expenses': [{
+            "pk": expense.pk,
+            "category": expense.category.pk,
+            "date": expense.date,
+            "amount": expense.amount,
+            "name": expense.name
+        } for
+            expense in expenses]})
