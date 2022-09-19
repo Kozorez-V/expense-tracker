@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'bootstrap5',
     'crispy_forms',
     'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -117,7 +118,10 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        ]
 }
 
 # Internationalization

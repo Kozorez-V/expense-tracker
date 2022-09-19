@@ -11,6 +11,8 @@ from expense_tracker.models import Category, Expense
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializers
     permission_classes = [IsAdminUser | IsAuthenticated]
+    filterset_fields = ['pk', 'username', 'email']
+    ordering_fields = ['pk', 'username', 'email']
 
     def get_queryset(self):
         if self.request.user.is_staff:
