@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
 
 from ..serializers import UserSerializers
 from expense_tracker.models import Category, Expense
@@ -11,8 +13,9 @@ from expense_tracker.models import Category, Expense
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializers
     permission_classes = [IsAdminUser | IsAuthenticated]
-    filterset_fields = ['pk', 'username', 'email']
-    ordering_fields = ['pk', 'username', 'email']
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['id', 'username', 'email']
+    ordering_fields = ['id', 'username', 'email']
 
     def get_queryset(self):
         if self.request.user.is_staff:

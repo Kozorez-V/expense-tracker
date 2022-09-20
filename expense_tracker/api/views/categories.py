@@ -10,8 +10,8 @@ from expense_tracker.models import Category
 class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser | IsAuthenticated]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ['pk', 'user', 'username']
-    ordering_fields = ['pk', 'user', 'username']
+    filterset_fields = ['id', 'user', 'name']
+    ordering_fields = ['id', 'user', 'name']
 
     def get_serializer_class(self):
         if self.request.user.is_staff:
