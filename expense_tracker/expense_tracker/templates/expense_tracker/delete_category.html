@@ -6,7 +6,6 @@
 
     {% if messages %}
     <p class="messages">{% for message in messages %}</p>
-    <p class="{{ message.tags }}">
     <div class="alert alert-danger" role="alert">
         <h4 class="alert-heading">Внимание!</h4>
         <p>{{ message|safe }}</p>

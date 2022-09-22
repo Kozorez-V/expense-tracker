@@ -1,7 +1,7 @@
 from django.db.models import Sum, Max, Min
 from django.db.models.functions import ExtractIsoWeekDay, ExtractMonth
 
-from expense_tracker.models import Category, Expense
+from .models import Category, Expense
 
 
 # statistics

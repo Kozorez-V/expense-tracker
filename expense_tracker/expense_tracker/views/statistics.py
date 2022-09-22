@@ -4,7 +4,7 @@ from django.views.generic import ListView
 
 from ..models import Category, Expense
 from ..servers import get_weekday_total, get_month_total
-from ..utils import StatisticsContextMixin
+from ..mixins import StatisticsContextMixin
 
 
 class TodayStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
