@@ -1,0 +1,223 @@
+[[package]]
+name = "asgiref"
+version = "3.5.2"
+description = "ASGI specs, helper code, and adapters"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
+
+[[package]]
+name = "beautifulsoup4"
+version = "4.11.1"
+description = "Screen-scraping library"
+category = "main"
+optional = false
+python-versions = ">=3.6.0"
+
+[package.dependencies]
+soupsieve = ">1.2"
+
+[package.extras]
+html5lib = ["html5lib"]
+lxml = ["lxml"]
+
+[[package]]
+name = "Django"
+version = "4.0.5"
+description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+asgiref = ">=3.4.1,<4"
+sqlparse = ">=0.2.2"
+tzdata = {version = "*", markers = "sys_platform == \"win32\""}
+
+[package.extras]
+argon2 = ["argon2-cffi (>=19.1.0)"]
+bcrypt = ["bcrypt"]
+
+[[package]]
+name = "django-bootstrap-v5"
+version = "1.0.11"
+description = "Bootstrap 5 support for Django projects"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.dependencies]
+beautifulsoup4 = ">=4.8.0,<5.0.0"
+django = ">=2.2,<5.0"
+
+[package.extras]
+docs = ["m2r2 (>=0.2.5,<0.3.0)", "sphinx (>=4.4,<5.0)", "sphinx_rtd_theme (>=1.0,<2.0)"]
+
+[[package]]
+name = "django-crispy-forms"
+version = "1.14.0"
+description = "Best way to have Django DRY forms"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "django-debug-toolbar"
+version = "3.5.0"
+description = "A configurable set of panels that display various debug information about the current request/response."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+Django = ">=3.2"
+sqlparse = ">=0.2.0"
+
+[[package]]
+name = "django-filter"
+version = "22.1"
+description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
+name = "djangorestframework"
+version = "3.13.1"
+description = "Web APIs for Django, made easy."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+django = ">=2.2"
+pytz = "*"
+
+[[package]]
+name = "psycopg2"
+version = "2.9.3"
+description = "psycopg2 - Python-PostgreSQL Database Adapter"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
+name = "python-dotenv"
+version = "0.20.0"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
+name = "pytz"
+version = "2022.2.1"
+description = "World timezone definitions, modern and historical"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "soupsieve"
+version = "2.3.2.post1"
+description = "A modern CSS selector implementation for Beautiful Soup."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
+name = "sqlparse"
+version = "0.4.3"
+description = "A non-validating SQL parser."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
+name = "tzdata"
+version = "2022.3"
+description = "Provider of IANA time zone data"
+category = "main"
+optional = false
+python-versions = ">=2"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.10"
+content-hash = "daf819cec6d59746a44133d46bf3e4cd51c0d575141b055f830fec71f0e4cb7e"
+
+[metadata.files]
+asgiref = [
+    {file = "asgiref-3.5.2-py3-none-any.whl", hash = "sha256:1d2880b792ae8757289136f1db2b7b99100ce959b2aa57fd69dab783d05afac4"},
+    {file = "asgiref-3.5.2.tar.gz", hash = "sha256:4a29362a6acebe09bf1d6640db38c1dc3d9217c68e6f9f6204d72667fc19a424"},
+]
+beautifulsoup4 = [
+    {file = "beautifulsoup4-4.11.1-py3-none-any.whl", hash = "sha256:58d5c3d29f5a36ffeb94f02f0d786cd53014cf9b3b3951d42e0080d8a9498d30"},
+    {file = "beautifulsoup4-4.11.1.tar.gz", hash = "sha256:ad9aa55b65ef2808eb405f46cf74df7fcb7044d5cbc26487f96eb2ef2e436693"},
+]
+Django = [
+    {file = "Django-4.0.5-py3-none-any.whl", hash = "sha256:502ae42b6ab1b612c933fb50d5ff850facf858a4c212f76946ecd8ea5b3bf2d9"},
+    {file = "Django-4.0.5.tar.gz", hash = "sha256:f7431a5de7277966f3785557c3928433347d998c1e6459324501378a291e5aab"},
+]
+django-bootstrap-v5 = [
+    {file = "django-bootstrap-v5-1.0.11.tar.gz", hash = "sha256:2d431308859ce3cab7729bb09c76039059cd5fbdd34484da82c4c7f8d49da3a2"},
+    {file = "django_bootstrap_v5-1.0.11-py3-none-any.whl", hash = "sha256:a207aa804938164c8450bbbef4faaba6d2093b3236000557a50f3bd44b53d268"},
+]
+django-crispy-forms = [
+    {file = "django-crispy-forms-1.14.0.tar.gz", hash = "sha256:35887b8851a931374dd697207a8f56c57a9c5cb9dbf0b9fa54314da5666cea5b"},
+    {file = "django_crispy_forms-1.14.0-py3-none-any.whl", hash = "sha256:bc4d2037f6de602d39c0bc452ac3029d1f5d65e88458872cc4dbc01c3a400604"},
+]
+django-debug-toolbar = [
+    {file = "django-debug-toolbar-3.5.0.tar.gz", hash = "sha256:97965f2630692de316ea0c1ca5bfa81660d7ba13146dbc6be2059cf55b35d0e5"},
+    {file = "django_debug_toolbar-3.5.0-py3-none-any.whl", hash = "sha256:89a52128309eb4da12738801ff0c202d2ff8730d1c3225fac6acf630c303e661"},
+]
+django-filter = [
+    {file = "django-filter-22.1.tar.gz", hash = "sha256:ed473b76e84f7e83b2511bb2050c3efb36d135207d0128dfe3ae4b36e3594ba5"},
+    {file = "django_filter-22.1-py3-none-any.whl", hash = "sha256:ed429e34760127e3520a67f415bec4c905d4649fbe45d0d6da37e6ff5e0287eb"},
+]
+djangorestframework = [
+    {file = "djangorestframework-3.13.1-py3-none-any.whl", hash = "sha256:24c4bf58ed7e85d1fe4ba250ab2da926d263cd57d64b03e8dcef0ac683f8b1aa"},
+    {file = "djangorestframework-3.13.1.tar.gz", hash = "sha256:0c33407ce23acc68eca2a6e46424b008c9c02eceb8cf18581921d0092bc1f2ee"},
+]
+psycopg2 = [
+    {file = "psycopg2-2.9.3-cp310-cp310-win32.whl", hash = "sha256:083707a696e5e1c330af2508d8fab36f9700b26621ccbcb538abe22e15485362"},
+    {file = "psycopg2-2.9.3-cp310-cp310-win_amd64.whl", hash = "sha256:d3ca6421b942f60c008f81a3541e8faf6865a28d5a9b48544b0ee4f40cac7fca"},
+    {file = "psycopg2-2.9.3-cp36-cp36m-win32.whl", hash = "sha256:9572e08b50aed176ef6d66f15a21d823bb6f6d23152d35e8451d7d2d18fdac56"},
+    {file = "psycopg2-2.9.3-cp36-cp36m-win_amd64.whl", hash = "sha256:a81e3866f99382dfe8c15a151f1ca5fde5815fde879348fe5a9884a7c092a305"},
+    {file = "psycopg2-2.9.3-cp37-cp37m-win32.whl", hash = "sha256:cb10d44e6694d763fa1078a26f7f6137d69f555a78ec85dc2ef716c37447e4b2"},
+    {file = "psycopg2-2.9.3-cp37-cp37m-win_amd64.whl", hash = "sha256:4295093a6ae3434d33ec6baab4ca5512a5082cc43c0505293087b8a46d108461"},
+    {file = "psycopg2-2.9.3-cp38-cp38-win32.whl", hash = "sha256:34b33e0162cfcaad151f249c2649fd1030010c16f4bbc40a604c1cb77173dcf7"},
+    {file = "psycopg2-2.9.3-cp38-cp38-win_amd64.whl", hash = "sha256:0762c27d018edbcb2d34d51596e4346c983bd27c330218c56c4dc25ef7e819bf"},
+    {file = "psycopg2-2.9.3-cp39-cp39-win32.whl", hash = "sha256:8cf3878353cc04b053822896bc4922b194792df9df2f1ad8da01fb3043602126"},
+    {file = "psycopg2-2.9.3-cp39-cp39-win_amd64.whl", hash = "sha256:06f32425949bd5fe8f625c49f17ebb9784e1e4fe928b7cce72edc36fb68e4c0c"},
+    {file = "psycopg2-2.9.3.tar.gz", hash = "sha256:8e841d1bf3434da985cc5ef13e6f75c8981ced601fd70cc6bf33351b91562981"},
+]
+python-dotenv = [
+    {file = "python-dotenv-0.20.0.tar.gz", hash = "sha256:b7e3b04a59693c42c36f9ab1cc2acc46fa5df8c78e178fc33a8d4cd05c8d498f"},
+    {file = "python_dotenv-0.20.0-py3-none-any.whl", hash = "sha256:d92a187be61fe482e4fd675b6d52200e7be63a12b724abbf931a40ce4fa92938"},
+]
+pytz = [
+    {file = "pytz-2022.2.1-py2.py3-none-any.whl", hash = "sha256:220f481bdafa09c3955dfbdddb7b57780e9a94f5127e35456a48589b9e0c0197"},
+    {file = "pytz-2022.2.1.tar.gz", hash = "sha256:cea221417204f2d1a2aa03ddae3e867921971d0d76f14d87abb4414415bbdcf5"},
+]
+soupsieve = [
+    {file = "soupsieve-2.3.2.post1-py3-none-any.whl", hash = "sha256:3b2503d3c7084a42b1ebd08116e5f81aadfaea95863628c80a3b774a11b7c759"},
+    {file = "soupsieve-2.3.2.post1.tar.gz", hash = "sha256:fc53893b3da2c33de295667a0e19f078c14bf86544af307354de5fcf12a3f30d"},
+]
+sqlparse = [
+    {file = "sqlparse-0.4.3-py3-none-any.whl", hash = "sha256:0323c0ec29cd52bceabc1b4d9d579e311f3e4961b98d174201d5622a23b85e34"},
+    {file = "sqlparse-0.4.3.tar.gz", hash = "sha256:69ca804846bb114d2ec380e4360a8a340db83f0ccf3afceeb1404df028f57268"},
+]
+tzdata = [
+    {file = "tzdata-2022.3-py2.py3-none-any.whl", hash = "sha256:f78d9c248154224aa0585fd0f6c2869428583455be52c410cb9c7f5717646854"},
+    {file = "tzdata-2022.3.tar.gz", hash = "sha256:abf83da1e7cca85c0df7448627843efacb5a69a515e1f47ac01ec064ef66297f"},
+]
