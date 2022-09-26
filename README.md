@@ -44,3 +44,7 @@
 - Python 3.10.2
 - Django 4.0.5
 - PostgreSQL 14.4
+
+## Установка зависимостей
+
+```poetry install```
