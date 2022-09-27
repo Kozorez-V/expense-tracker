@@ -97,7 +97,7 @@ DATABASES = {
     #     'USER': 'postgres',
     #     'PASSWORD': '12345',
     #     'HOST': 'localhost',
-    #     'PORT': '5432'
+    #     'PORT': '5432'git 
     # }
     'default': dj_database_url.config(
            # Feel free to alter this value to suit your needs.
