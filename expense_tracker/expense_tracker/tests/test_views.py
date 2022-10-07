@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from ..models import Category, Expense, Profile
 
+
 class setUpMixins:
     def setUp(self):
         self.client = Client()
@@ -12,6 +13,7 @@ class setUpMixins:
         self.test_user.save()
         login = self.client.login(username='user', password='1234pass')
         self.failUnless(login, 'Could not log in')
+
 
 class IndexTest(setUpMixins, TestCase):
     def test_url_exist(self):

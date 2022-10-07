@@ -27,6 +27,11 @@ def get_min_amount(expenses):
     return expenses.aggregate(Min('amount', default=0.0))
 
 
+def get_date(request):
+    if request.method == 'GET':
+        print(request.GET)
+
+
 # weekly
 def get_weekday_total(current_user):
     weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']

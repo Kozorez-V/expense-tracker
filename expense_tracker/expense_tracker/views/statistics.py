@@ -1,6 +1,10 @@
+from datetime import date
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.views.generic import ListView
+
+from django.shortcuts import redirect
 
 from ..models import Category, Expense
 from ..servers import get_weekday_total, get_month_total
@@ -17,8 +21,14 @@ class TodayStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        today_expenses = Expense.objects.today(self.request.user)
-        c_def = self.get_user_context(expenses=today_expenses, title='Сегодня', limit_time='day_limit')
+
+        expenses = Expense.objects.today(self.request.user)
+
+        if self.request.method == 'GET' and self.request.GET.get('select_date') is not None:
+            print(self.request.GET.get('select_date'))
+            expenses = Expense.objects.filter(date=self.request.GET.get('select_date'), user=self.request.user)
+
+        c_def = self.get_user_context(expenses=expenses, title='Сегодня', limit_time='day_limit')
 
         return dict(list(context.items()) + list(c_def.items()))
 

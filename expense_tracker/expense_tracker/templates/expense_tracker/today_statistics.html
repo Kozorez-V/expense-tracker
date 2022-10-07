@@ -1,51 +1,57 @@
 {% extends 'expense_tracker/base.html' %}
 
 {% block content %}
-<h1>{{ title }}</h1>
+    <h1>{{ title }}</h1>
 
-<p><b>Дата:</b> {{ date }}</p>
+    <p><b>Текущая дата:</b> {{ date }}</p>
 
-<table class="table table-hover">
-    <thead class="table-light">
-    <tr>
-        <th scope="col">Категория</th>
-        <th scope="col">Всего</th>
-    </tr>
-    </thead>
+    <form method="GET">
+        <label for="select_date"><b>Выбрать дату:</b></label>
+        <input type="date" id="select_date" name="select_date">
+        <input type="submit">
+    </form>
 
-    <tbody>
-    {% for category in categories %}
-    <tr>
-        <td>{{ category }}</td>
+    <table class="table table-hover">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">Категория</th>
+            <th scope="col">Всего</th>
+        </tr>
+        </thead>
 
-        {% if category.pk in nonempty_category_pk %}
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category }}</td>
 
-        {% for amount in amount_per_category %}
+                {% if category.pk in nonempty_category_pk %}
 
-        {% if amount.category == category.pk %}
-        <td>
-            {{ amount.total_amount }}
-        </td>
-        {% endif %}
+                    {% for amount in amount_per_category %}
 
+                        {% if amount.category == category.pk %}
+                            <td>
+                                {{ amount.total_amount }}
+                            </td>
+                        {% endif %}
+
+                    {% endfor %}
+
+                {% else %}
+                    <td>0,0</td>
+
+                {% endif %}
+
+            </tr>
         {% endfor %}
 
-        {% else %}
-        <td>0,0</td>
+        </tbody>
+    </table>
 
-        {% endif %}
-
-    </tr>
-    {% endfor %}
-
-    </tbody>
-</table>
-
-{% if excess_limit %}
-<p><b>Ваш дневной лимит превышен на</b> {{ excess_limit }} </p>
-{% endif %}
-<p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
-<p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
-<p><b>Итого:</b> {{ total_amount.amount__sum }}</p>
+    {% if excess_limit %}
+        <p><b>Ваш дневной лимит превышен на</b> {{ excess_limit }} </p>
+    {% endif %}
+    <p><b>Максимальная сумма:</b> {{ max_amount.amount__max }}</p>
+    <p><b>Минимальная сумма:</b> {{ min_amount.amount__min }}</p>
+    <p><b>Итого:</b> {{ total_amount.amount__sum }}</p>
 
 {% endblock %}
