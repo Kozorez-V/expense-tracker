@@ -1,7 +1,16 @@
 <h1 align="center">Трекер расходов</h1>
 <p align="center">
-<img src="https://img.shields.io/github/commit-activity/m/Kozorez-V/expense-tracker?style=flat"/>
-![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
+<a href="https://www.djangoproject.com/">
+<img src="https://img.shields.io/badge/django-%23092E20.svg?style=flat&logo=django&logoColor=white"/>
+</a>
+<a href="https://www.django-rest-framework.org/">
+<img src="https://img.shields.io/badge/DJANGO-REST-ff1709?style=flat&logo=django&logoColor=white&color=ff1709&labelColor=gray"/>
+</a>
+<a href="https://www.postgresql.org/">
+<img src="https://img.shields.io/badge/postgres-%23316192.svg?style=flat&logo=postgresql&logoColor=white"/>
+</a>
+<img src="https://img.shields.io/github/commit-activity/m/Kozorez-V/expense-tracker?style=flat&color=purple"/>
+<img src="https://img.shields.io/github/repo-size/Kozorez-V/expense-tracker?color=red"/>
 </p>
 
 
@@ -48,6 +57,7 @@
 
 - Python 3.10.2
 - Django 4.0.5
+- Django Rest Framework
 - PostgreSQL 14.4
 
 ## Установка зависимостей
