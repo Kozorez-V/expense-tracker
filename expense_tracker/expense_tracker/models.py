@@ -78,7 +78,7 @@ class Expense(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-        categories = Category.objects.bulk_create(
+        Category.objects.bulk_create(
             [
                 Category(user=instance, name='Дом'),
                 Category(user=instance, name='Продукты'),
