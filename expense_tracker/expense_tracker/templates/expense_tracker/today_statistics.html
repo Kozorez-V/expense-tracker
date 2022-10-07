@@ -20,8 +20,6 @@
 
         {% if category.pk in nonempty_category_pk %}
 
-            {{ nonempty_category_pk }}
-
         {% for amount in amount_per_category %}
 
         {% if amount.category == category.pk %}
@@ -39,7 +37,6 @@
 
     </tr>
     {% endfor %}
-
 
     </tbody>
 </table>
