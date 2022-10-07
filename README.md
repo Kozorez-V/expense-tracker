@@ -9,6 +9,9 @@
 <a href="https://www.postgresql.org/">
 <img src="https://img.shields.io/badge/postgres-%23316192.svg?style=flat&logo=postgresql&logoColor=white"/>
 </a>
+<a href="https://django-bootstrap-v5.readthedocs.io/en/latest/#">
+<img src="https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=flat&logo=bootstrap&logoColor=white"/>
+</a>
 <img src="https://img.shields.io/github/commit-activity/m/Kozorez-V/expense-tracker?style=flat&color=purple"/>
 <img src="https://img.shields.io/github/repo-size/Kozorez-V/expense-tracker?color=red"/>
 </p>
@@ -57,8 +60,9 @@
 
 - Python 3.10.2
 - Django 4.0.5
-- Django Rest Framework
+- Django Rest Framework 3.13.1
 - PostgreSQL 14.4
+- Bootstrap 5
 
 ## Установка зависимостей
 
