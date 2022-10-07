@@ -1,4 +1,9 @@
-# Трекер расходов
+<h1 align="center">Трекер расходов</h1>
+<p align="center">
+<img src="https://img.shields.io/github/commit-activity/m/Kozorez-V/expense-tracker?style=flat"/>
+![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
+</p>
+
 
 Веб-приложение для отслеживания расходов.
 
@@ -47,6 +52,17 @@
 
 ## Установка зависимостей
 
-Запустить команду:
+```
+pip install poetry
+poetry install
+```
 
-```poetry install```
+## Запуск
+
+- Установить [just](https://github.com/casey/just)
+
+Ввести команду:
+
+```
+just runserver
+```
