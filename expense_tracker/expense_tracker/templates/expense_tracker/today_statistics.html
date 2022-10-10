@@ -1,13 +1,15 @@
 {% extends 'expense_tracker/base.html' %}
 
+{% load static %}
+
 {% block content %}
     <h1>{{ title }}</h1>
 
     <p><b>Текущая дата:</b> {{ date }}</p>
 
     <form method="GET">
-        <label for="select_date"><b>Выбрать дату:</b></label>
-        <input type="date" id="select_date" name="select_date">
+        <label for="date"><b>Выбрать дату:</b></label>
+        <input type="date" name="date" id="date">
         <input type="submit">
     </form>
 
