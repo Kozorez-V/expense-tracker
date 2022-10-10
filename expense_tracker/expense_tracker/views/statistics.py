@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -23,10 +23,18 @@ class TodayStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
         expenses = Expense.objects.today(self.request.user)
 
         if self.request.method == 'GET' and self.request.GET.get('select_date') is not None:
-            expenses = Expense.objects.filter(date=self.request.GET.get('select_date'), user=self.request.user)
+            expenses = Expense.objects.filter(
+                date=self.request.GET.get('select_date'),
+                user=self.request.user
+                )
 
-        c_def = self.get_user_context(expenses=expenses, title='Сегодня', limit_time='day_limit')
-
+        c_def = self.get_user_context(
+            expenses=expenses,
+            title='День',
+            selected_date=self.request.GET.get('select_date'),
+            limit_time='day_limit'
+            )
+            
         return dict(list(context.items()) + list(c_def.items()))
 
 
@@ -56,8 +64,7 @@ class WeeklyStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'], context['weekdays'],
-        context['weekday_total'] = get_weekday_total(self.request.user)
+        context['categories'], context['weekdays'], context['weekday_total'] = get_weekday_total(self.request.user)
         current_week_expenses = Expense.objects.current_week(self.request.user)
         c_def = self.get_user_context(
             expenses=current_week_expenses,
@@ -74,8 +81,7 @@ class AnnualStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'], context['months'],
-        context['month_total'] = get_month_total(self.request.user)
+        context['categories'], context['months'], context['month_total'] = get_month_total(self.request.user)
         current_year_expenses = Expense.objects.current_year(self.request.user)
         c_def = self.get_user_context(
             expenses=current_year_expenses, title='Год'

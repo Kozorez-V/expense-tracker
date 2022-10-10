@@ -8,7 +8,7 @@ from .servers import get_amount_per_category, \
 
 
 class StatisticsContextMixin:
-    def get_user_context(self, expenses, title, limit_time=None, **kwargs):
+    def get_user_context(self, expenses, title, selected_date=None, limit_time=None, **kwargs):
         context = kwargs
 
         context['amount_per_category'] = get_amount_per_category(expenses)
@@ -18,11 +18,21 @@ class StatisticsContextMixin:
         context['min_amount'] = get_min_amount(expenses)
 
         if limit_time is not None:
-            limit = Profile.objects.get_limit_value(self.request.user, limit_time)
+            limit = Profile.objects.get_limit_value(
+                self.request.user,
+                limit_time
+                )
+            
+            context['excess_limit'] = get_excess_limit(
+                limit,
+                context['total_amount']['amount__sum']
+                )
 
-            context['excess_limit'] = get_excess_limit(limit, context['total_amount']['amount__sum'])
-
-        context['date'] = date.today()
+        if selected_date is not None:
+            context['date'] = selected_date
+        else:
+            context['date'] = date.today()
+        
         context['title'] = title
 
         return context

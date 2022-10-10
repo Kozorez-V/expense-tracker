@@ -1,8 +1,12 @@
-let field = document.querySelector('#date')
+// let date_field = document.querySelector('#select_date');
+// let date_form = document.getElementById('form')
 
-if (field) {
-    date.addEventListener('input', function () {
-        let date = new Date(field.value);
-        console.log(date);
-    });
-};
+// let date = NaN;
+
+// if (date_field) {
+//     select_date.addEventListener('input', function () {
+//         date = new Date(date_field.value);
+//         console.log(date);
+//     })
+// }
+
