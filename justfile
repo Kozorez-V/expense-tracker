@@ -2,6 +2,10 @@
 runserver:
     poetry run python expense_tracker/manage.py runserver
 
+# Run migrate
+migrate:
+    poetry run python expense_tracker/manage.py migrate
+
 # Run all expense_tracker tests
 test:
     poetry run python expense_tracker/manage.py test expense_tracker
