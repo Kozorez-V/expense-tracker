@@ -21,17 +21,19 @@ class TodayStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         expenses = Expense.objects.today(self.request.user)
+        selected_date = None
 
         if self.request.method == 'GET' and self.request.GET.get('select_date') is not None:
+            selected_date = datetime.strptime(self.request.GET.get('select_date'), '%Y-%m-%d').date()
             expenses = Expense.objects.filter(
-                date=self.request.GET.get('select_date'),
+                date=selected_date,
                 user=self.request.user
                 )
 
         c_def = self.get_user_context(
             expenses=expenses,
             title='День',
-            selected_date=self.request.GET.get('select_date'),
+            selected_date=selected_date,
             limit_time='day_limit'
             )
             
@@ -49,8 +51,19 @@ class MonthStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         month_expenses = Expense.objects.current_month(self.request.user)
+
+        selected_date = None
+
+        if self.request.method == 'GET' and self.request.GET.get('select_date') is not None:
+            selected_date = datetime.strptime(self.request.GET.get('select_date'), '%Y-%m-%d').date()
+            month_expenses = Expense.objects.filter(
+                date__month=selected_date.month,
+                user=self.request.user
+                )
+
         c_def = self.get_user_context(
             expenses=month_expenses,
+            selected_date=selected_date,
             title='Месяц',
             limit_time='month_limit'
             )
@@ -64,10 +77,25 @@ class WeeklyStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'], context['weekdays'], context['weekday_total'] = get_weekday_total(self.request.user)
         current_week_expenses = Expense.objects.current_week(self.request.user)
+
+        selected_date = None
+
+        if self.request.method == 'GET' and self.request.GET.get('select_date') is not None:
+            selected_date = datetime.strptime(self.request.GET.get('select_date'), '%Y-%m-%d').date()
+            current_week_expenses = Expense.objects.filter(
+                date__week=selected_date.isocalendar()[1],
+                user=self.request.user
+                )
+
+        context['categories'], context['weekdays'], context['weekday_total'] = get_weekday_total(
+            current_user=self.request.user,
+            selected_date=selected_date
+            )
+
         c_def = self.get_user_context(
             expenses=current_week_expenses,
+            selected_date=selected_date,
             title='Неделя',
             limit_time='week_limit'
             )
@@ -81,10 +109,26 @@ class AnnualStatistics(LoginRequiredMixin, StatisticsContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'], context['months'], context['month_total'] = get_month_total(self.request.user)
         current_year_expenses = Expense.objects.current_year(self.request.user)
+
+        selected_date = None
+
+        if self.request.method == 'GET' and self.request.GET.get('select_date') is not None:
+            selected_date = datetime.strptime(self.request.GET.get('select_date'), '%Y-%m-%d').date()
+            current_year_expenses = Expense.objects.filter(
+                date__year=selected_date.isocalendar()[0],
+                user=self.request.user
+                )
+
+        context['categories'], context['months'], context['month_total'] = get_month_total(
+            current_user=self.request.user,
+            selected_date=selected_date
+            )
+
         c_def = self.get_user_context(
-            expenses=current_year_expenses, title='Год'
+            expenses=current_year_expenses,
+            selected_date=selected_date,
+            title='Год'
             )
 
         return dict(list(context.items()) + list(c_def.items()))

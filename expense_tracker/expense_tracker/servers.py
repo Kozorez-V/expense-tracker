@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db.models import Sum, Max, Min
 from django.db.models.functions import ExtractIsoWeekDay, ExtractMonth
 
@@ -27,18 +28,20 @@ def get_min_amount(expenses):
     return expenses.aggregate(Min('amount', default=0.0))
 
 
-def get_date(request):
-    if request.method == 'GET':
-        print(request.GET)
-
-
 # weekly
-def get_weekday_total(current_user):
+def get_weekday_total(current_user, selected_date=None):
     weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
     weekday_total = {}
     categories = Category.objects.get_user_categories(current_user)
 
     current_week_expenses = Expense.objects.current_week(current_user)
+
+    if selected_date is not None:
+        current_week_expenses = Expense.objects.filter(
+                date__week=selected_date.isocalendar()[1],
+                user=current_user
+                )
+
     expenses_by_weekday = current_week_expenses.values('category', 'date') \
         .annotate(weekday=ExtractIsoWeekDay('date')).annotate(Sum('amount'))
 
@@ -54,13 +57,20 @@ def get_weekday_total(current_user):
 
 
 # monthly
-def get_month_total(current_user):
+def get_month_total(current_user, selected_date=None):
     months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
               'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
     month_total = {}
     categories = Category.objects.get_user_categories(current_user)
 
     current_year_expenses = Expense.objects.current_year(current_user)
+
+    if selected_date is not None:
+        current_year_expenses = Expense.objects.filter(
+                date__year=selected_date.isocalendar()[0],
+                user=current_user
+                )
+
     expenses_by_month = current_year_expenses.values('category') \
         .annotate(month=ExtractMonth('date')).values('category', 'month').annotate(Sum('amount'))
 
