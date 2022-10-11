@@ -74,8 +74,13 @@ poetry install
 ## Запуск
 
 - Установить [just](https://github.com/casey/just)
+- Осуществить миграцию:
 
-Ввести команду:
+```
+just migrate
+```
+
+- Запустить локальный сервер:
 
 ```
 just runserver
