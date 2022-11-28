@@ -64,24 +64,14 @@
 - PostgreSQL 14.4
 - Bootstrap 5
 
-## Установка зависимостей
-
-```
-pip install poetry
-poetry install
-```
 
 ## Запуск
 
-- Установить [just](https://github.com/casey/just)
-- Осуществить миграцию:
+Для **Windows**
 
+- `docker-compose up -d --build`
+- `poetry run python expense_tracker/manage.py createsuperuser`
+- Через адресную строку перейти по адресу
 ```
-just migrate
-```
-
-- Запустить локальный сервер:
-
-```
-just runserver
+192.168.99.100:8080
 ```

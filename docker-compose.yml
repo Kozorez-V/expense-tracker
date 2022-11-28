@@ -3,7 +3,8 @@ services:
   web:
     container_name: expense_tracker
     build: .
-    command: poetry run python expense_tracker/manage.py runserver 0.0.0.0:8080
+    command: bash -c "poetry run python expense_tracker/manage.py migrate
+      && poetry run python expense_tracker/manage.py runserver 0.0.0.0:8080"
     volumes:
       - .:/usr/src/app/
     ports:
