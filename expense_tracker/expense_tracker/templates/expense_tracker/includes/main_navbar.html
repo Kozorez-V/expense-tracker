@@ -39,7 +39,7 @@
 
             {% elif request.user.is_superuser %}
             <li class="nav-item">
-                <a class="nav-link link-light" href="http://127.0.0.1:8000/admin/">Административная панель</a>
+                <a class="nav-link link-light" href="{% url 'admin:index' %}">Административная панель</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link link-light" href="{% url 'logout' %}">Выйти</a>

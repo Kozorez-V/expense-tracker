@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  web:
+    container_name: expense_tracker
+    build: .
+    command: poetry run python expense_tracker/manage.py runserver 0.0.0.0:8080
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - 8080:8080
+    environment:
+      - DB_HOST=db
+      - DB_NAME=expense_tracker
+      - DB_USER=postgres
+      - DB_PASS=12345
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    container_name: expense_tracker_db
+    volumes:
+      - postgres_data/:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=expense_tracker
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres_data:

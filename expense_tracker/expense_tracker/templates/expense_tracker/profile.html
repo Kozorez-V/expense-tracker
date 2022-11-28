@@ -20,28 +20,34 @@
         {% csrf_token %}
 
         <div class="col-md-5">
-            <div class="form-group">
+            <div class="row-3">
                 <label class="small mb-1">Имя:</label>
                 {{ user_form.username }}
                 <label class="small mb-1">Email:</label>
                 {{ user_form.email }}
             </div>
-            <a href="{% url 'change_password' %}">Изменить пароль</a>
+            <div style=""><a href="{% url 'change_password' %}">Изменить пароль</a></div>
             <hr>
 
             <h6>Лимит</h6>
 
-            <div class="form-group mb-3">
-                <label class="small mb-1">День:</label>
+            <div class="mb-3 row">
+                <label class="small mb-1">День</label>
+                <div class="col">
                 {{ profile_form.day_limit }}
             </div>
-            <div class="form-group mb-3">
-                <label class="small mr-10">Неделя:</label>
+            </div>
+            <div class="mb-3 row">
+                <label class="small mr-10">Неделя</label>
+                <div class="col">
                 {{ profile_form.week_limit }}
             </div>
-            <div class="form-group mb-3">
-                <label class="small mr-10">Месяц:</label>
+            </div>
+            <div class="mb-3 row">
+                <label class="small mr-10">Месяц</label>
+                <div class="col">
                 {{ profile_form.month_limit }}
+            </div>
             </div>
         </div>
 
