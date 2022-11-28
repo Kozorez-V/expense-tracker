@@ -10,3 +10,5 @@ COPY . .
 RUN pip install --upgrade pip && pip install poetry && poetry install
 
 EXPOSE 8080
+
+CMD ['']

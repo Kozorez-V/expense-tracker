@@ -64,13 +64,6 @@
 - PostgreSQL 14.4
 - Bootstrap 5
 
-## Установка зависимостей
-
-```
-pip install poetry
-poetry install
-```
-
 ## Запуск
 
 - Установить [just](https://github.com/casey/just)
