@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'expense_tracker',
         'USER': 'postgres',
         'PASSWORD': '12345',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '5432'
     }
 }

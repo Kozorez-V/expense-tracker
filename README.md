@@ -65,13 +65,21 @@
 - Bootstrap 5
 
 
-## Запуск
+## Развертывание
+
+Установите poetry, docker, docker-compose.
 
 Для **Windows**
 
-- `docker-compose up -d --build`
+- `docker-compose up -d`
 - `poetry run python expense_tracker/manage.py createsuperuser`
 - Через адресную строку перейти по адресу
 ```
 192.168.99.100:8080
 ```
+
+Для **Linux**
+
+- `sudo docker-compose up -d`
+- `poetry run python expense_tracker/manage.py createsuperuser`
+- `poetry run python expense_tracker/manage.py runserver`
