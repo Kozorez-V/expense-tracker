@@ -4,16 +4,13 @@ services:
     container_name: expense_tracker
     build: .
     command: bash -c "poetry run python expense_tracker/manage.py migrate
-      && poetry run python expense_tracker/manage.py runserver 0.0.0.0:8080"
+      && poetry run python expense_tracker/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/usr/src/app/
     ports:
-      - 8080:8080
-    environment:
-      - DB_HOST=db
-      - DB_NAME=expense_tracker
-      - DB_USER=postgres
-      - DB_PASS=12345
+      - 8000:8000
+    env_file:
+      - ./.env.dev
     depends_on:
       - db
   db:
@@ -22,8 +19,8 @@ services:
     volumes:
       - postgres_data/:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=12345
       - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
       - POSTGRES_DB=expense_tracker
     ports:
       - 5432:5432

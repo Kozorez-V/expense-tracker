@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  web:
+    container_name: expense_tracker_prod
+    build: .
+    command: gunicorn settings.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    container_name: expense_tracker_db_prod
+    volumes:
+      - postgres_data/:/var/lib/postgresql/data
+    env_file:
+      - ./.env.prod.db
+
+volumes:
+  postgres_data:
